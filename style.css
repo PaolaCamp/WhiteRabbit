@@ -1,0 +1,2346 @@
+
+
+/* Stile Globale e Sfondo */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow-y: auto; 
+    font-family: 'Arial', sans-serif; 
+    color: white;
+    background-color: #000;
+}
+
+/* Regola fondamentale per nascondere gli elementi (Modal e Overlay) */
+.hidden {
+    display: none !important; 
+}
+
+#game-container {
+    min-height: 100vh; 
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    /* SFONDO (Simulazione Hex Grid) */
+    background: radial-gradient(circle at center, #0a1128 0%, #000000 100%);
+    background-image: repeating-linear-gradient(
+        45deg, 
+        rgba(0, 0, 0, 0.7) 0px, 
+        rgba(0, 0, 0, 0.7) 1px, 
+        transparent 1px, 
+        transparent 10px
+    ), linear-gradient(
+        to bottom, 
+        #000000 0%, 
+        #001122 100%
+    );
+    
+    position: relative;
+    /* Rimosso box-shadow per evitare conflitti */
+    box-shadow: none;
+}
+
+/* ------------------------------------- */
+/* DEFINIZIONE FONDAMENTALE DEGLI SCHERMI DI GIOCO */
+/* ------------------------------------- */
+
+.full-screen {
+    width: 100vw;
+    height: 100vh;
+    position: fixed; /* Cruciale per coprire l'intero viewport */
+    top: 0;
+    left: 0;
+    z-index: 10;
+    
+    /* Display: flex, in modo che il messaggio di missione sia centrato */
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    padding: 0;
+}
+
+/* ------------------------------------- */
+/* Elementi Barra Superiore (Top Bar) */
+/* ------------------------------------- */
+
+.top-bar {
+    width: 90%;
+    position: fixed; 
+    top: 20px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2em;
+    font-weight: bold;
+    z-index: 60; 
+    transition: opacity 0.3s ease-in-out;
+}
+
+.left-menu, .right-settings {
+    cursor: pointer;
+    text-shadow: 0 0 5px rgba(0, 200, 255, 0.8); 
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center; 
+    background: rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
+    border: 1px solid #00FFFF;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+    transition: background-color 0.2s;
+}
+.left-menu:hover, .right-settings:hover {
+    background-color: rgba(0, 255, 255, 0.1);
+}
+
+.left-menu span, .right-settings span {
+    margin: 0 5px;
+}
+
+.menu-icon, .settings-icon {
+    font-size: 1.5em; 
+    line-height: 1; 
+    color: #00FFFF;
+    text-shadow: 0 0 5px #00FFFF, 0 0 10px #00FFFF;
+}
+
+/* ------------------------------------- */
+/* Area Centrale (Logo e Titolo) */
+/* ------------------------------------- */
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15vh; 
+    padding-top: 100px; 
+    padding-bottom: 200px; 
+}
+
+.game-title {
+    font-size: 4em;
+    margin: 0;
+    padding: 0;
+    text-shadow: 
+        0 0 5px #00FFFF, 
+        0 0 10px #00FFFF,
+        0 0 20px #00FFFF,
+        -1px 1px 0 #FF00FF,
+        1px -1px 0 #00FF00;
+    font-weight: 900;
+    letter-spacing: 5px;
+    transition: filter 0.3s;
+    color: white; 
+}
+
+/* Orecchie del Coniglio (Rabbit Ears) */
+.rabbit-ears {
+    width: 100px;
+    height: 60px;
+    margin-bottom: -10px;
+    position: relative;
+}
+
+.rabbit-ears::before, .rabbit-ears::after {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 50px;
+    background: transparent;
+    border: 5px solid white;
+    border-radius: 50% / 60px;
+    box-shadow: 0 0 5px #00FFFF, 0 0 10px #00FFFF, 0 0 20px #00FFFF;
+}
+
+.rabbit-ears::before {
+    transform: rotate(-25deg);
+    left: 10px;
+    top: -5px;
+}
+
+.rabbit-ears::after {
+    transform: rotate(25deg);
+    right: 10px;
+    top: -5px;
+}
+
+/* Pulsanti Principali */
+.button-group {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: row; 
+    gap: 15px;
+}
+
+.menu-button {
+    width: 180px;
+    padding: 15px 30px;
+    font-size: 1em;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    color: #FFFFFF;
+    background: transparent;
+    border: 2px solid #00FFFF;
+    border-radius: 0; 
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    transition: background-color 0.3s, box-shadow 0.3s;
+    z-index: 10;
+}
+
+.menu-button:hover {
+    background-color: rgba(0, 255, 255, 0.2); 
+    box-shadow: 0 0 20px #00FFFF;
+}
+
+/* ------------------------------------- */
+/* Pannello FLUTTUANTE & Modali Comuni */
+/* ------------------------------------- */
+
+.floating-panel {
+    background-color: rgba(13, 26, 45, 0.95);
+    border: 2px solid #00FFFF; 
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.5); 
+    position: fixed;
+    z-index: 50;
+}
+
+.panel-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    backdrop-filter: blur(2px);
+}
+
+/* ------------------------------------- */
+/* Side Menu */
+/* ------------------------------------- */
+
+#side-menu {
+    width: 300px; 
+    height: auto;
+    bottom: 20px; 
+    left: 20px; 
+    top: auto;
+    transform: translateX(-150%);
+    transition: transform 0.3s ease-in-out;
+    padding: 20px; 
+    display: flex;
+    flex-direction: column;
+}
+
+#side-menu.visible {
+    transform: translateX(0);
+}
+
+.side-menu-title {
+    color: #00FFFF;
+    text-shadow: 0 0 5px #00FFFF;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+}
+
+.side-menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; 
+}
+
+.side-button {
+    text-align: left;
+    width: 100%;
+    padding: 8px 10px; 
+    font-size: 1em;
+    color: white;
+    background: transparent;
+    border: 1px solid #00FFFF; 
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+    text-transform: uppercase;
+    font-weight: bold;
+    box-shadow: 0 0 5px rgba(0, 255, 255, 0.2);
+}
+
+.side-button:hover {
+    background-color: rgba(0, 255, 255, 0.2); 
+    color: #00FFFF;
+    box-shadow: 0 0 10px #00FFFF;
+}
+
+.side-close-button {
+    background: transparent;
+    color: #00FFFF;
+    border: 2px solid #00FFFF;
+    padding: 10px;
+    font-size: 1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 0 10px #00FFFF;
+    margin-top: 20px;
+    width: 100%; 
+    transition: background-color 0.2s;
+}
+.side-close-button:hover {
+    background: rgba(0, 255, 255, 0.1);
+}
+
+.icons-content {
+    max-height: 80vh; /* Il pop-up non supererà l'80% dell'altezza dello schermo */
+    display: flex;
+    flex-direction: column;
+}
+
+.icons-body {
+    overflow-y: auto; /* Attiva lo scroll verticale se il contenuto eccede */
+    padding-right: 10px; /* Spazio per la scrollbar */
+}
+
+/* Opzionale: Rendi la scrollbar in stile Cyberpunk */
+.icons-body::-webkit-scrollbar {
+    width: 8px;
+}
+.icons-body::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+}
+.icons-body::-webkit-scrollbar-thumb {
+    background: #FF00FF; /* Colore Magenta come i tuoi tasti */
+    border-radius: 4px;
+    box-shadow: 0 0 10px #FF00FF;
+}
+
+/* ------------------------------------- */
+/* Pop-up IMPOSTAZIONI (Modal) */
+/* ------------------------------------- */
+
+#settings-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    backdrop-filter: blur(2px);
+}
+
+.modal-content {
+    width: 350px;
+    padding: 0;
+    max-height: 90vh;
+    overflow-y: hidden;
+    background-color: #0d1a2d;
+    border: 2px solid #00FFFF;
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.8), inset 0 0 10px rgba(0, 255, 255, 0.5);
+    color: white;
+    text-align: center;
+    position: relative;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    border-bottom: 2px solid #00FFFF;
+    position: relative;
+}
+
+.settings-title-top {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #00FFFF;
+    text-shadow: 0 0 5px #00FFFF;
+    letter-spacing: 2px;
+}
+
+.top-right-settings {
+    background-color: transparent;
+    color: #00FFFF;
+    padding: 0;
+    font-size: 0.9em;
+    font-weight: bold;
+    clip-path: none;
+    box-shadow: none;
+    position: static; /* Necessario per non uscire dal flusso del modal header */
+}
+
+.modal-body {
+    padding: 15px 20px;
+    text-align: left;
+    overflow-y: auto;
+    max-height: calc(90vh - 100px);
+}
+
+.modal-divider {
+    border: none;
+    border-top: 1px dashed rgba(0, 255, 255, 0.5); 
+    margin: 15px 0;
+}
+
+.setting-group h3 {
+    font-size: 1em;
+    color: #00FFFF;
+    text-shadow: 0 0 3px #00FFFF;
+    margin-top: 0;
+    margin-bottom: 10px;
+    text-align: left; 
+    padding-bottom: 5px;
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 0.9em;
+    padding: 5px 0;
+}
+
+.setting-item span:first-child {
+    font-weight: bold;
+    color: #00FFFF;
+}
+
+.setting-value-selector {
+    color: white;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    font-weight: bold;
+    margin-right: 10px;
+    flex-grow: 1;
+    text-align: right;
+}
+
+.setting-value-bar {
+    height: 10px;
+    width: 100px;
+    background-color: rgba(0, 255, 255, 0.1);
+    border: 1px solid #00FFFF;
+    box-sizing: border-box;
+}
+
+.volume-level {
+    height: 100%;
+    background: #00FFFF;
+    transition: width 0.3s;
+}
+
+.close-button {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    background: transparent;
+    border: 2px solid #00FFFF;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+    transition: background-color 0.3s, box-shadow 0.3s;
+    margin-top: 10px;
+}
+
+.close-button:hover {
+    background-color: rgba(0, 255, 255, 0.2);
+    box-shadow: 0 0 20px #00FFFF;
+}
+
+.privacy-item {
+    justify-content: flex-start;
+    gap: 15px;
+}
+
+/* Switch (Slider ON/OFF) */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #333;
+    transition: .4s;
+    border: 1px solid #00FFFF;
+    border-radius: 10px; 
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #00FFFF;
+    box-shadow: 0 0 5px #00FFFF;
+}
+
+input:checked + .slider:before {
+    transform: translateX(18px);
+    background-color: #000;
+}
+
+/* ------------------------------------- */
+/* Modale Story */
+/* ------------------------------------- */
+
+.story-content {
+    width: 80%; 
+    max-width: 700px;
+    padding: 0;
+    background-color: #0d1a2d;
+    border: 2px solid #00FFFF;
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.8), inset 0 0 10px rgba(0, 255, 255, 0.5);
+    color: white;
+    position: relative;
+    max-height: 90vh; 
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; 
+}
+
+.story-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 2px solid #00FFFF;
+    position: relative;
+}
+
+.story-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #00FFFF;
+    text-shadow: 0 0 5px #00FFFF;
+    letter-spacing: 2px;
+}
+
+.story-content .top-right-settings { 
+    background-color: #FF00FF; 
+    color: black;
+    padding: 3px 8px;
+    font-size: 0.8em;
+    font-weight: bold;
+    clip-path: polygon(100% 0, 100% 100%, 20% 100%, 0 0);
+    box-shadow: 0 0 10px #FF00FF;
+}
+
+.story-body {
+    padding: 20px;
+    text-align: left;
+    overflow-y: auto; 
+    flex-grow: 1;
+}
+
+.story-section {
+    margin-bottom: 25px;
+    border-left: 3px solid rgba(0, 255, 255, 0.5); 
+    padding-left: 15px;
+}
+
+.story-section h3 {
+    font-size: 1.1em;
+    color: #00FFFF;
+    text-shadow: 0 0 3px #00FFFF;
+    margin-top: 0;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed rgba(0, 255, 255, 0.2);
+    padding-bottom: 5px;
+}
+
+.story-body p, .story-body li {
+    font-size: 0.95em;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.monospace-text {
+    font-family: 'Courier New', monospace;
+    color: #00FF00; 
+}
+
+.final-objective {
+    margin-top: 30px;
+    border: 2px dashed #FF00FF;
+    padding: 15px;
+    background-color: rgba(255, 0, 255, 0.1);
+}
+
+.final-note {
+    font-weight: bold;
+    text-align: center;
+    color: #FF00FF;
+}
+
+#close-story-button {
+    width: 100%; 
+    padding: 10px; 
+    font-size: 1em; 
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    background: transparent;
+    border: 2px solid #00FFFF;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+    transition: background-color 0.3s, box-shadow 0.3s;
+    margin-top: auto; 
+}
+
+#close-story-button:hover {
+    background-color: rgba(0, 255, 255, 0.2); 
+    box-shadow: 0 0 20px #00FFFF;
+}
+
+/* ------------------------------------- */
+/* Modale Game Phases */
+/* ------------------------------------- */
+.phases-content {
+    width: 90%; 
+    max-width: 900px; 
+    padding: 0;
+    background-color: #0d1a2d;
+    border: 2px solid #00FFFF;
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.8), inset 0 0 10px rgba(0, 255, 255, 0.5);
+    color: white;
+    position: relative;
+    max-height: 90vh; 
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; 
+}
+
+.phases-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 2px solid #00FFFF;
+    position: relative;
+}
+
+.phases-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #00FFFF;
+    text-shadow: 0 0 5px #00FFFF;
+    letter-spacing: 2px;
+}
+
+.phases-body {
+    padding: 20px;
+    text-align: left;
+    overflow-y: auto; 
+    flex-grow: 1;
+}
+
+.phases-introduction h3 {
+    font-size: 1.1em;
+    color: #00FFFF;
+    text-shadow: 0 0 3px #00FFFF;
+    margin-top: 0;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+}
+
+.phases-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+    text-align: left;
+    margin-top: 15px;
+    border: 1px solid #00FFFF;
+}
+
+.phases-table th, .phases-table td {
+    padding: 12px;
+    border: 1px dashed rgba(0, 255, 255, 0.3);
+}
+
+.phases-table thead th {
+    background-color: rgba(0, 255, 255, 0.1);
+    color: #00FFFF;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+}
+
+.phases-table tbody tr:hover {
+    background-color: rgba(0, 255, 255, 0.05);
+}
+
+.phases-table td:nth-child(1) { 
+    font-weight: bold;
+    color: white;
+    width: 15%;
+}
+
+.phases-table td:nth-child(4) { 
+    color: #FF00FF; 
+    font-style: italic;
+}
+
+#close-phases-button {
+    width: 100%; 
+    padding: 10px; 
+    font-size: 1em; 
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    background: transparent;
+    border: 2px solid #00FFFF;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+    transition: background-color 0.3s, box-shadow 0.3s;
+    margin-top: auto; 
+}
+
+#close-phases-button:hover {
+    background-color: rgba(0, 255, 255, 0.2); 
+    box-shadow: 0 0 20px #00FFFF;
+}
+
+/* ------------------------------------- */
+/* SCHERMATA DI GIOCO (GAME SCREEN 1 & 2 & 3) */
+/* ------------------------------------- */
+
+/* Sfondo Fase 1 */
+#game-screen-1 .game-background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('s1_game.jpg'); 
+    background-size: cover;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    filter: brightness(0.7) saturate(1.2) hue-rotate(-20deg);
+    box-shadow: inset 0 0 100px rgba(0, 200, 255, 0.2);
+    z-index: 1;
+}
+
+/* Sfondo Fase 2 */
+#background-phase-2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('s2_game.jpeg'); 
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    filter: none; 
+    z-index: 1;
+}
+
+/* Sfondo Fase 3 */
+#background-phase-3 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('s3_game.jpg'); 
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    filter: brightness(0.9) saturate(1.1) hue-rotate(10deg); 
+    z-index: 1;
+}
+
+
+/* Stile della Finestra di Messaggio (pop-up START) */
+.mission-message-box {
+    position: relative;
+    z-index: 10;
+    width: 90%;
+    max-width: 550px;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.8);
+    border: 3px solid #00FFFF;
+    box-shadow: 0 0 15px #00FFFF, 0 0 30px rgba(0, 255, 255, 0.5);
+    text-align: center;
+}
+
+.mission-message-box h2 {
+    color: #FF00FF; 
+    text-shadow: 0 0 5px #FF00FF;
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.message-box-button {
+    padding: 10px 20px;
+    font-size: 1em;
+    color: #000000;
+    background: #00FFFF;
+    border: none; 
+    cursor: pointer;
+    box-shadow: 0 0 10px #00FFFF;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.message-box-button:hover {
+    background: #FF00FF;
+    color: black;
+    box-shadow: 0 0 20px #FF00FF;
+}
+
+/* ------------------------------------- */
+/* BARRE DI STATO (RISCHIO E PROGRESSO) */
+/* ------------------------------------- */
+
+.status-bar-container {
+    position: fixed; /* Usa fixed per rimanere in posizione fissa */
+    bottom: 20px;
+    top:auto;
+    z-index: 20;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 8px 15px;
+    border: 1px solid #00FFFF;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5), inset 0 0 5px rgba(0, 255, 255, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Posizionamento Fase 1 e Fase 2 (Correzione) */
+#risk-bar-container, #risk-bar-container-2, #risk-bar-container-3 { left: 20px; right: auto; }
+#progress-bar-container, #progress-bar-container-2, #progress-bar-container-3 { right: 20px; left: auto; }
+
+.bar-label {
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #FF00FF;
+    text-shadow: 0 0 5px #FF00FF;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+}
+
+.progress-bar {
+    width: 200px;
+    height: 18px;
+    background: #333;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #fff;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.progress-fill {
+    height: 100%;
+    transition: width 0.5s ease-in-out;
+}
+
+.risk-fill {
+    background: linear-gradient(to right, 
+        #00FF00 0%, 
+        #FFFF00 50%, 
+        #FF0000 100%
+    );
+    background-color: #FF0000; /* Fallback */
+}
+
+.completion-fill {
+    background: linear-gradient(to right, 
+        #FF0000 0%, 
+        #FFFF00 50%, 
+        #00FF00 100%
+    );
+}
+
+/* ------------------------------------- */
+/* ICONA DI AZIONE (GLOSSARIO & EXIT) */
+/* ------------------------------------- */
+
+/* Stile base per le icone di azione (Glossary, Legend, Menu, Exit) */
+.action-icon {
+    position: fixed;
+    top: 20px;    /* Tutti i tasti allineati al margine superiore */
+    bottom: auto;
+    right: 20px; /* Allineati tutti a destra */
+    z-index: 60; /* Sopra lo sfondo del gioco */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid #00FFFF; /* Tema Ciano */
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Effetto al passaggio del mouse per il tasto Menu */
+.mission-menu-trigger:hover {
+    background: rgba(0, 255, 255, 0.2);
+    box-shadow: 0 0 25px #00FFFF;
+}
+
+/* Posizionamento verticale specifico per incolonnarli sopra EXIT */
+/* EXIT sta a bottom: 20px, MENU starà a bottom: 80px (60px di differenza) */
+.exit-game-icon { 
+    bottom: 20px; border-color: #FF00FF; box-shadow: 0 0 15px rgba(255, 0, 255, 0.5); }
+
+
+.action-icon {
+    position: fixed;
+    bottom: 20px; 
+    z-index: 20; 
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+/* 1. Icona GLOSSARY (Ciano) */
+#glossary-icon, #glossary-icon-2, #glossary-icon-3 { 
+    left: 20px; 
+    right: auto;
+    border: 2px solid #00FFFF; 
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+}
+
+#glossary-icon:hover, #glossary-icon-2:hover, #glossary-icon-3:hover {
+    background: rgba(0, 255, 255, 0.2);
+    box-shadow: 0 0 25px #00FFFF;
+}
+
+#glossary-icon .icon-text, #glossary-icon-2 .icon-text, #glossary-icon-3 .icon-text {
+    color: #00FFFF;
+    text-shadow: 0 0 5px #00FFFF;
+}
+
+.legend-trigger-icon {
+    top: 20px;
+    left: 105px; /* Spostato a destra di Glossary */
+    bottom: auto;
+    right: auto;
+}
+
+/* AGGIUNTA: Stile per il tasto LEGEND In-game */
+.legend-trigger-icon {
+    border: 2px solid #FF00FF !important; /* Colore Magenta per distinguerlo */
+    box-shadow: 0 0 15px rgba(255, 0, 255, 0.8) !important;
+}
+
+.legend-trigger-icon:hover {
+    background: rgba(255, 0, 255, 0.2) !important;
+    box-shadow: 0 0 25px #FF00FF !important;
+}
+
+.legend-trigger-icon .icon-text {
+    color: #FF00FF !important;
+    text-shadow: 0 0 5px #FF00FF !important;
+}
+
+/* 2. Icona EXIT (Magenta) */
+#exit-icon, #exit-icon-2, #exit-icon-3 { 
+    top: 20px; 
+    right: 20px;
+    border: 2px solid #FF00FF; 
+    box-shadow: 0 0 15px rgba(255, 0, 255, 0.8);
+}
+
+#exit-icon:hover, #exit-icon-2:hover, #exit-icon-3:hover {
+    background: rgba(255, 0, 255, 0.2);
+    box-shadow: 0 0 25px #FF00FF;
+}
+
+#exit-icon .icon-text, #exit-icon-2 .icon-text, #exit-icon-3 .icon-text {
+    color: #FF00FF; 
+    text-shadow: 0 0 5px #FF00FF;
+}
+
+.icon-text {
+    font-size: 2em; 
+    line-height: 1;
+}
+
+.icon-label {
+    font-size: 0.7em;
+    color: white;
+    font-weight: bold;
+    margin-top: 5px;
+    letter-spacing: 1px;
+}
+
+/* ------------------------------------- */
+/* NARRATOR BOX (Messaggio AI/Suggerimento) */
+/* ------------------------------------- */
+
+.narrator-message {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20; /* Più alto per stare sopra le icone Glossario/Exit */
+    
+    display: flex;
+    align-items: center;
+    width: 90%;
+    max-width: 650px;
+    
+    background-color: rgba(13, 26, 45, 0.95); 
+    border: 2px solid #00FFFF;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+    padding: 10px;
+}
+
+.narrator-icon {
+    flex-shrink: 0;
+    width: 100px;
+    height: 60px;
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rabbit-figure {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+/* Stile del coniglio */
+.rabbit-figure::before {
+    content: '';
+    position: absolute;
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background-image: url('rabbit.png'); 
+    background-size: contain; 
+    background-repeat: no-repeat;
+    background-position: left center; 
+    background-color: transparent;
+    box-shadow: none;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+}
+
+.narrator-text-content {
+    flex-grow: 1;
+    border-left: 1px dashed rgba(0, 255, 255, 0.4);
+    padding-left: 15px;
+}
+
+.narrator-text-content p {
+    margin: 0;
+    font-size: 0.95em;
+    line-height: 1.4;
+    color: white;
+    font-family: 'Courier New', monospace; 
+}
+
+/* ------------------------------------- */
+/* HOTSPOT INVISIBILE */
+/* ------------------------------------- */
+
+.hotspot-trigger {
+    position: absolute;
+    z-index: 5; 
+    cursor: pointer;
+    background: transparent; 
+    border: 2px dashed rgba(255, 0, 255, 0.5); /* Bordo di debug */
+    transition: border-color 0.2s;
+}
+
+.hotspot-trigger:hover {
+    border: 2px solid #FF00FF; 
+    background-color: rgba(255, 0, 255, 0.1); 
+}
+
+/* ------------------------------------- */
+/* MODAL TERMINAL (Password Prompt) */
+/* ------------------------------------- */
+
+.terminal-content {
+    width: 450px;
+    max-width: 90%;
+    padding: 0;
+    font-family: 'Courier New', monospace;
+    position: relative; 
+}
+
+.terminal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: #00FFFF; 
+    color: black;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.terminal-status {
+    color: #FF00FF; 
+    background-color: black;
+    padding: 2px 5px;
+}
+
+.terminal-body {
+    padding: 15px;
+    text-align: left;
+    background-color: black;
+    color: #00FF00; 
+}
+
+.prompt-line {
+    margin: 0 0 5px 0;
+    font-size: 1em;
+}
+
+.input-line {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.cursor {
+    color: #FF00FF; 
+    margin-right: 5px;
+}
+
+#password-input {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    color: #00FF00;
+    font-family: 'Courier New', monospace;
+    font-size: 1em;
+    outline: none;
+    border-bottom: 1px dashed #00FF00;
+    padding: 2px;
+}
+
+.terminal-button {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    color: black;
+    background: #00FFFF;
+    border: 2px solid #00FFFF;
+    box-shadow: 0 0 10px #00FFFF;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.terminal-button:hover {
+    background: #FF00FF;
+    box-shadow: 0 0 20px #FF00FF;
+    color: black;
+}
+
+.feedback-text {
+    margin-top: 10px;
+    font-weight: bold;
+    min-height: 1.2em;
+}
+
+.error-text {
+    color: #FF00FF; 
+}
+
+.success-text {
+    color: #00FF00; 
+}
+
+/* Tasto di Chiusura del Terminale (X) */
+.terminal-close-btn {
+    position: absolute;
+    top: -15px; 
+    right: -15px; 
+    
+    width: 30px;
+    height: 30px;
+    
+    background-color: #FF00FF; 
+    color: black;
+    font-weight: bold;
+    font-size: 1.2em;
+    line-height: 1;
+    text-align: center;
+    
+    border: 2px solid #00FFFF;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 10px #FF00FF;
+    transition: background-color 0.2s, box-shadow 0.2s;
+    z-index: 110; 
+}
+
+.terminal-close-btn:hover {
+    background-color: #00FFFF;
+    box-shadow: 0 0 20px #00FFFF;
+    border-color: #FF00FF;
+}
+
+/* ------------------------------------- */
+/* MODAL LEZIONE APPRESA (Lesson Learned) */
+/* ------------------------------------- */
+
+.lesson-content {
+    width: 550px;
+    max-width: 90%;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    position: relative; 
+}
+
+.lesson-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: #FF00FF; 
+    color: black;
+    font-weight: bold;
+    font-size: 0.9em;
+    border-bottom: 2px solid #00FFFF;
+}
+
+.lesson-title {
+    color: black; 
+    text-shadow: 0 0 5px white;
+    letter-spacing: 1px;
+}
+
+.lesson-status {
+    color: #00FFFF; 
+    background-color: black;
+    padding: 2px 5px;
+}
+
+.lesson-body {
+    padding: 20px;
+    text-align: left;
+    background-color: rgba(13, 26, 45, 0.95); 
+    color: white;
+}
+
+.lesson-body h3 {
+    color: #00FFFF;
+    text-shadow: 0 0 5px #00FFFF;
+    margin-top: 0;
+    font-size: 1.1em;
+    padding-bottom: 5px;
+    border-bottom: 1px dashed rgba(0, 255, 255, 0.3);
+}
+
+.theory-text {
+    font-size: 0.95em;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.theory-text strong {
+    color: #FF00FF;
+}
+
+.lesson-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1em;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    background: transparent;
+    border: 2px solid #00FFFF;
+    box-shadow: 0 0 10px #00FFFF;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    margin-top: 0;
+}
+
+.lesson-button:hover {
+    background: rgba(0, 255, 255, 0.2);
+    box-shadow: 0 0 20px #00FFFF;
+}
+
+/* ------------------------------------- */
+/* MODAL DECISIONE (Chiavetta USB) */
+/* ------------------------------------- */
+.decision-content {
+    width: 400px;
+    max-width: 90%;
+    padding: 0;
+    position: relative;
+    border: 2px solid #FF00FF; 
+    box-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+}
+
+.decision-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: #0d1a2d;
+    color: #FF00FF;
+    font-weight: bold;
+    font-size: 0.9em;
+    border-bottom: 2px solid #FF00FF;
+}
+
+.decision-title {
+    color: #FF00FF; 
+    text-shadow: 0 0 5px #FF00FF;
+}
+
+.decision-status {
+    color: #00FFFF; 
+    background-color: black;
+    padding: 2px 5px;
+}
+
+.decision-body {
+    padding: 20px;
+    text-align: left;
+    background-color: rgba(13, 26, 45, 0.9); 
+    color: white;
+}
+
+.decision-body h3 {
+    color: #FF00FF;
+    text-shadow: 0 0 5px #FF00FF;
+    margin-top: 0;
+    font-size: 1.1em;
+    padding-bottom: 5px;
+    border-bottom: 1px dashed rgba(255, 0, 255, 0.3);
+}
+
+.decision-buttons {
+    display: flex;
+    justify-content: space-around;
+    padding: 15px;
+    border-top: 1px solid rgba(255, 0, 255, 0.3);
+}
+
+.decision-button {
+    padding: 10px 15px;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    width: 45%;
+}
+
+.decision-button.danger {
+    color: white;
+    background: transparent;
+    border: 2px solid #FF00FF;
+    box-shadow: 0 0 10px #FF00FF;
+}
+
+.decision-button.danger:hover {
+    background-color: rgba(255, 0, 255, 0.2);
+    box-shadow: 0 0 20px #FF00FF;
+}
+
+.decision-button.safe {
+    color: black;
+    background: #00FFFF;
+    border: 2px solid #00FFFF;
+    box-shadow: 0 0 10px #00FFFF;
+}
+
+.decision-button.safe:hover {
+    background-color: #FFFFFF;
+    box-shadow: 0 0 20px #FFFFFF;
+}
+
+/* ------------------------------------- */
+/* MODAL LEZIONE FINALE FASE 1 (Stuxnet) */
+/* ------------------------------------- */
+#stuxnet-lesson-modal .lesson-header {
+    background-color: #FF00FF; 
+    color: black;
+}
+
+#stuxnet-lesson-modal .lesson-status {
+    color: #00FF00; 
+}
+
+#stuxnet-lesson-modal .lesson-button {
+    border-color: #00FF00; 
+    box-shadow: 0 0 15px #00FF00;
+}
+
+#stuxnet-lesson-modal .lesson-button:hover {
+    background: rgba(0, 25, 0, 0.2);
+    box-shadow: 0 0 25px #00FF00;
+}
+
+/* ------------------------------------- */
+/* MODAL FASE COMPLETATA (Phase Complete) */
+/* ------------------------------------- */
+
+.complete-content {
+    width: 450px;
+    max-width: 90%;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    border: 2px solid #00FF00; 
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+}
+
+.complete-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: #00FF00; 
+    color: black;
+    font-weight: bold;
+    font-size: 0.9em;
+    border-bottom: 2px solid #00FFFF;
+}
+
+.complete-title {
+    color: black; 
+    text-shadow: 0 0 5px white;
+    letter-spacing: 1px;
+}
+
+.complete-content .top-right-settings { 
+    background-color: #0d1a2d; 
+    color: #00FFFF;
+    padding: 3px 8px;
+    font-size: 0.8em;
+    font-weight: bold;
+    clip-path: polygon(100% 0, 100% 100%, 20% 100%, 0 0);
+    box-shadow: 0 0 10px #00FFFF;
+}
+
+.complete-body {
+    padding: 20px;
+    text-align: left;
+    background-color: rgba(13, 26, 45, 0.95); 
+    color: white;
+}
+
+.complete-body h3 {
+    color: #00FF00;
+    text-shadow: 0 0 5px #00FF00;
+    margin-top: 0;
+    font-size: 1.1em;
+    padding-bottom: 5px;
+    border-bottom: 1px dashed rgba(0, 255, 0, 0.3);
+}
+
+.complete-body ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 20px;
+}
+
+.complete-body li {
+    font-size: 0.95em;
+    margin-bottom: 5px;
+    color: #00FFFF;
+}
+
+.final-message-text {
+    font-weight: bold;
+    font-size: 1em;
+    padding-top: 10px;
+    border-top: 1px dashed #00FF00;
+    text-align: center;
+}
+
+.final-message-text strong {
+    color: #FF00FF;
+}
+
+.complete-decision-buttons {
+    display: flex;
+    justify-content: space-around;
+    padding: 15px;
+    border-top: 1px solid rgba(0, 255, 0, 0.3); 
+    gap: 10px; 
+}
+
+.complete-decision-buttons .decision-button {
+    width: 50%;
+}
+
+/* ------------------------------------- */
+/* MODAL TERMINAL (Modifiche per Fase 2) */
+/* ------------------------------------- */
+
+.wide-modal {
+    width: 650px; /* Larghezza maggiore per contenere la tabella */
+    max-width: 90%;
+}
+
+.asset-table-container {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #00FF00;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    overflow-x: auto;
+}
+
+.asset-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+}
+
+.asset-table th, .asset-table td {
+    padding: 8px 12px;
+    text-align: left;
+    border: 1px solid rgba(0, 255, 0, 0.2);
+    color: #00FF00;
+}
+
+.asset-table thead th {
+    background-color: rgba(0, 255, 0, 0.1);
+    color: #00FFFF;
+}
+
+.modal-divider-thin {
+    border: none;
+    border-top: 1px dashed rgba(0, 255, 0, 0.5);
+    margin: 10px 0;
+}
+
+.terminal-input-prompt {
+    color: white;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+/* Colore input IP nella modal */
+#ip-input {
+    background: transparent;
+    border: none;
+    color: #FFFF00; /* Giallo per l'input */
+    font-family: 'Courier New', monospace;
+    font-size: 1em;
+    outline: none;
+    border-bottom: 1px dashed #FFFF00;
+    padding: 2px;
+}
+
+/* Stile per la lista all'interno del lesson modal */
+.lesson-list {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 10px;
+}
+
+.lesson-list li {
+    margin-bottom: 10px;
+    padding-left: 15px;
+    position: relative;
+    font-size: 0.9em;
+    line-height: 1.4;
+}
+
+/* Icona puntatore lista stile Cyber Neon */
+.lesson-list li::before {
+    content: '>>'; 
+    position: absolute;
+    left: 0;
+    color: #FF00FF; 
+    font-weight: bold;
+}
+
+/* ------------------------------------- */
+/* MODAL LOGIN NVR (Nuovi Stili per Input separati) */
+/* ------------------------------------- */
+
+/* Il login NVR riutilizza .terminal-content */
+#nvr-login-modal .terminal-content {
+    width: 450px;
+    max-width: 90%;
+}
+
+#nvr-login-modal .terminal-body h3 {
+    color: #00FFFF;
+    text-shadow: 0 0 5px #00FFFF;
+    margin-top: 5px;
+    font-size: 1.1em;
+    padding-bottom: 5px;
+    border-bottom: 1px dashed rgba(0, 255, 255, 0.3);
+}
+
+.login-field {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.login-field .cursor {
+    color: #00FFFF; /* Cursore ciano */
+    font-weight: bold;
+    width: 120px; /* Spazio fisso per allineare gli input */
+    flex-shrink: 0;
+}
+
+/* Input di testo e password per il login NVR */
+#nvr-username-input, 
+#nvr-password-input {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    color: #FFFF00; /* Giallo per l'input per contrasto */
+    font-family: 'Courier New', monospace;
+    font-size: 1em;
+    outline: none;
+    border-bottom: 1px dashed #FFFF00;
+    padding: 2px;
+}
+
+/* Stile per l'hint nel modale NVR */
+.terminal-input-prompt .monospace-text {
+    color: #00FF00 !important;
+}
+
+/* ------------------------------------- */
+/* MODAL DECISIONE PATCH MANAGEMENT (Riutilizza decision-content) */
+/* ------------------------------------- */
+
+#patch-decision-modal .decision-content {
+    width: 500px;
+    max-width: 90%;
+    border-color: #FFFF00; /* Giallo per indicare un allarme di sistema */
+    box-shadow: 0 0 30px rgba(255, 255, 0, 0.5);
+}
+
+#patch-decision-modal .decision-header {
+    background-color: #0d1a2d;
+    color: #FFFF00;
+    border-bottom: 2px solid #FFFF00;
+}
+
+#patch-decision-modal .decision-title {
+    color: #FFFF00;
+    text-shadow: 0 0 5px #FFFF00;
+}
+
+#patch-decision-modal .decision-status {
+    color: #FF00FF;
+    background-color: black;
+}
+
+#patch-decision-modal .decision-body h3 {
+    color: #FFFF00;
+    text-shadow: 0 0 5px #FFFF00;
+    border-bottom: 1px dashed rgba(255, 255, 0, 0.3);
+}
+
+#action-update-now {
+    /* Azione di Pericolo Controllato */
+    color: white;
+    background: transparent;
+    border: 2px solid #FF00FF;
+    box-shadow: 0 0 10px #FF00FF;
+}
+
+#action-ignore-and-crash {
+    /* Azione Alternativa per il Crash */
+    color: black;
+    background: #00FF00;
+    border: 2px solid #00FF00;
+    box-shadow: 0 0 10px #00FF00;
+}
+
+/* ------------------------------------- */
+/* MODAL CRITTOGRAFIA CAESAR (FASE 3) */
+/* ------------------------------------- */
+
+#caesar-cipher-modal .terminal-content {
+    width: 600px;
+    max-width: 90%;
+    border: 2px solid #FF00FF; 
+    box-shadow: 0 0 30px rgba(255, 0, 255, 0.8), inset 0 0 10px rgba(255, 0, 255, 0.5);
+}
+
+#caesar-cipher-modal .terminal-header {
+    background-color: #FF00FF;
+    color: black;
+    border-bottom: 2px solid #00FFFF;
+}
+
+#caesar-cipher-modal .terminal-title {
+    color: black;
+    text-shadow: 0 0 5px white;
+}
+
+#caesar-cipher-modal .terminal-status {
+    color: #00FFFF;
+}
+
+#caesar-cipher-modal #cipher-key-input {
+    color: #00FF00; 
+    border-bottom: 1px dashed #00FF00;
+}
+
+#caesar-cipher-modal .terminal-button {
+    background: #FF00FF;
+    border-color: #FF00FF;
+    box-shadow: 0 0 10px #FF00FF;
+}
+
+#caesar-cipher-modal .terminal-button:hover {
+    background: #00FFFF;
+    box-shadow: 0 0 20px #00FFFF;
+}
+
+/* ------------------------------------- */
+/* NUOVO MODALE LEZIONE CAESAR (Fase 3) */
+/* ------------------------------------- */
+#caesar-lesson-modal .lesson-header {
+    background-color: #FF00FF; 
+    color: black;
+}
+
+#caesar-lesson-modal .lesson-status {
+    color: #00FF00; 
+}
+
+#caesar-lesson-modal .lesson-body h3 {
+    color: #FF00FF;
+    text-shadow: 0 0 5px #FF00FF;
+    border-bottom: 1px dashed rgba(255, 0, 255, 0.3);
+}
+
+#caesar-lesson-modal .lesson-list li::before {
+    content: '>>'; 
+    color: #00FFFF; 
+}
+
+#caesar-lesson-modal .lesson-button {
+    border-color: #FF00FF; 
+    box-shadow: 0 0 15px #FF00FF;
+}
+
+#caesar-lesson-modal .lesson-button:hover {
+    background: rgba(255, 0, 255, 0.2);
+    box-shadow: 0 0 25px #FF00FF;
+}
+
+/* ------------------------------------- */
+/* MODAL VITTORIA FINALE (Final Win) */
+/* ------------------------------------- */
+
+#final-win-modal .complete-content {
+    border-color: #FF00FF;
+    box-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+}
+
+#final-win-modal .complete-header {
+    /* Modifiche per ospitare la barra di progresso a 100% */
+    background-color: #0d1a2d;
+    border-bottom: 2px solid #00FF00;
+    justify-content: center;
+}
+
+#final-win-modal .complete-body h3 {
+    color: #FF00FF;
+    text-shadow: 0 0 5px #FF00FF;
+    border-bottom: 1px dashed rgba(255, 0, 255, 0.3);
+}
+
+#final-win-modal .complete-body li {
+    color: #00FFFF;
+}
+
+#final-win-modal .final-message-text {
+    border-top: 1px dashed #FF00FF;
+    color: #FF00FF;
+}
+
+#final-win-modal #final-exit-menu {
+    border-color: #FF00FF;
+    background: transparent;
+    box-shadow: 0 0 10px #FF00FF;
+}
+
+#final-win-modal #final-exit-menu:hover {
+    background: rgba(255, 0, 255, 0.2);
+    box-shadow: 0 0 20px #FF00FF;
+}
+
+/* ------------------------------------- */
+/* MODALE DEBRIEFING (Post-Win/Failure) */
+/* ------------------------------------- */
+
+#debriefing-modal .story-content {
+    max-width: 600px;
+}
+
+#debriefing-modal .story-section h3 {
+    color: #FF00FF;
+    text-shadow: 0 0 5px #FF00FF;
+    border-bottom: 1px dashed rgba(255, 0, 255, 0.3);
+}
+
+#debriefing-modal .story-section p {
+    color: white;
+}
+
+/* ------------------------------------- */
+/* MODALE CYBER GLOSSARY */
+/* ------------------------------------- */
+
+.glossary-content {
+    width: 90%; 
+    max-width: 800px;
+    padding: 0;
+    background-color: #0d1a2d;
+    border: 2px solid #FF00FF; /* Colore Magenta per enfasi sull'archivio dati */
+    box-shadow: 0 0 30px rgba(255, 0, 255, 0.8), inset 0 0 10px rgba(255, 0, 255, 0.5);
+    color: white;
+    position: relative;
+    max-height: 90vh; 
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; 
+}
+
+.glossary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 2px solid #FF00FF;
+    position: relative;
+}
+
+.glossary-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #00FFFF;
+    text-shadow: 0 0 5px #00FFFF;
+    letter-spacing: 2px;
+}
+
+.glossary-content .top-right-settings { 
+    background-color: #00FFFF; 
+    color: black;
+    padding: 3px 8px;
+    font-size: 0.8em;
+    font-weight: bold;
+    clip-path: polygon(100% 0, 100% 100%, 20% 100%, 0 0);
+    box-shadow: 0 0 10px #00FFFF;
+}
+
+.glossary-body {
+    padding: 20px;
+    text-align: left;
+    overflow-y: auto; 
+    flex-grow: 1;
+}
+
+.glossary-phase {
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+}
+
+.glossary-phase h3 {
+    font-size: 1.4em;
+    color: #FF00FF; /* Magenta per il titolo di fase */
+    text-shadow: 0 0 5px #FF00FF;
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 2px solid rgba(255, 0, 255, 0.3);
+    padding-bottom: 5px;
+}
+
+.glossary-lesson-item {
+    margin-bottom: 20px;
+    border-left: 3px solid #00FFFF; /* Ciano per l'elemento lezione */
+    padding-left: 15px;
+}
+
+.glossary-lesson-item h4 {
+    color: #00FFFF;
+    font-size: 1.1em;
+    margin-top: 0;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.glossary-lesson-item p {
+    font-size: 0.95em;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.glossary-lesson-item .monospace-text {
+    font-family: 'Courier New', monospace;
+    color: #00FF00; /* Verde per i consigli/mitigazioni */
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 5px;
+    display: block;
+}
+
+.glossary-divider {
+    border: none;
+    border-top: 3px double rgba(0, 255, 255, 0.5);
+    margin: 30px 0;
+}
+
+/* Riutilizzo del close-button */
+#close-glossary-button {
+    width: 100%; 
+    padding: 10px; 
+    font-size: 1em; 
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    background: transparent;
+    border: 2px solid #FF00FF; /* Bordo Magenta */
+    box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+    transition: background-color 0.3s, box-shadow 0.3s;
+    margin-top: auto; 
+}
+
+#close-glossary-button:hover {
+    background-color: rgba(255, 0, 255, 0.2); 
+    box-shadow: 0 0 20px #FF00FF;
+}
+
+/* ------------------------------------- */
+/* MODALE GAME ICONS (ICONE) */
+/* ------------------------------------- */
+
+#icons-modal .icons-content {
+    width: 90%; 
+    max-width: 650px; 
+    border: 2px solid #00FFFF; 
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.8), inset 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.icons-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 2px solid #00FFFF;
+}
+
+.icons-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #FF00FF;
+    text-shadow: 0 0 5px #FF00FF;
+    letter-spacing: 2px;
+}
+
+.icons-body {
+    padding: 20px;
+    text-align: left;
+    overflow-y: auto;
+}
+
+.icons-phase h3 {
+    font-size: 1.2em;
+    color: #00FFFF;
+    text-shadow: 0 0 5px #00FFFF;
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 2px solid rgba(0, 255, 255, 0.3);
+    padding-bottom: 5px;
+}
+
+.icons-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95em;
+}
+
+.icons-table th, .icons-table td {
+    border: 1px dashed rgba(0, 255, 255, 0.3);
+    padding: 12px;
+}
+
+.icons-table thead th {
+    background-color: rgba(0, 255, 255, 0.1);
+    color: #00FFFF;
+    text-transform: uppercase;
+}
+
+.icons-table td:nth-child(1) {
+    width: 150px; 
+    text-align: center;
+    font-weight: bold;
+}
+
+.progress-bar-legend {
+    width: 100px;
+    height: 15px;
+    background: #333;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #fff;
+    margin: 5px auto;
+}
+
+.completion-legend .progress-fill {
+    background: linear-gradient(to right, #FF0000, #00FF00);
+}
+
+.legend-text-label {
+    display: block;
+    margin-top: 5px;
+    color: #FFFF00;
+}
+
+.legend-icon-text {
+    font-size: 2.5em;
+    line-height: 1;
+}
+
+.legend-icon-cyan { color: #00FFFF; text-shadow: 0 0 5px #00FFFF; }
+.legend-icon-magenta { color: #FF00FF; text-shadow: 0 0 5px #FF00FF; }
+
+.narrator-icon-legend {
+    width: 40px;
+    height: 30px;
+    margin: 5px auto;
+    background-image: url('rabbit.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: drop-shadow(0 0 3px white);
+}
+
+#close-icons-button {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    background: transparent;
+    border: 2px solid #00FFFF;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+    transition: background-color 0.3s, box-shadow 0.3s;
+    margin-top: 20px;
+}
+
+#close-icons-button:hover {
+    background-color: rgba(0, 255, 255, 0.2);
+    box-shadow: 0 0 20px #00FFFF;
+}
+
+/* ------------------------------------- */
+/* NUOVO: MODALE LEGEND (INDICI AMBIENTALI) */
+/* ------------------------------------- */
+
+#legend-modal .legend-content {
+    width: 90%; 
+    max-width: 800px; 
+    border: 2px solid #FF00FF; 
+    box-shadow: 0 0 30px rgba(255, 0, 255, 0.8), inset 0 0 10px rgba(255, 0, 255, 0.5);
+    /* NUOVE PROPRIETÀ AGGIUNTE/MODIFICATE: */
+    max-height: 90vh; /* Forza il modale a non superare il 90% dell'altezza dello schermo */
+    display: flex; /* Abilita flexbox */
+    flex-direction: column; /* Organizza il contenuto in colonna */
+    overflow: hidden; /* Nasconde lo scorrimento principale sul contenitore */
+}
+
+.legend-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 2px solid #FF00FF;
+}
+
+.legend-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #00FFFF;
+    text-shadow: 0 0 5px #00FFFF;
+    letter-spacing: 2px;
+}
+
+.legend-body {
+    padding: 20px;
+    text-align: left;
+    /* NUOVE PROPRIETÀ AGGIUNTE/MODIFICATE: */
+    overflow-y: auto; /* Abilita lo scorrimento verticale solo su questo elemento */
+    flex-grow: 1; /* Permette al body di occupare lo spazio rimanente */
+}
+
+.legend-phase h3 {
+    font-size: 1.2em;
+    color: #FF00FF;
+    text-shadow: 0 0 5px #FF00FF;
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 2px solid rgba(255, 0, 255, 0.3);
+    padding-bottom: 5px;
+}
+
+.legend-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95em;
+}
+
+.legend-table th, .legend-table td {
+    border: 1px dashed rgba(255, 0, 255, 0.3);
+    padding: 12px;
+}
+
+.legend-table thead th {
+    background-color: rgba(255, 0, 255, 0.1);
+    color: #FF00FF;
+    text-transform: uppercase;
+}
+
+.legend-table td:nth-child(1) {
+    width: 180px; 
+    text-align: center;
+    font-weight: bold;
+}
+
+.clue-placeholder {
+    width: 100%;
+    height: 60px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #00FF00;
+    font-size: 0.8em;
+    text-align: center;
+    padding: 5px;
+}
+
+.clue-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+#close-legend-button {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    background: transparent;
+    border: 2px solid #FF00FF;
+    box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+    transition: background-color 0.3s, box-shadow 0.3s;
+    margin-top: 20px;
+}
+
+#close-legend-button:hover {
+    background-color: rgba(255, 0, 255, 0.2);
+    box-shadow: 0 0 20px #FF00FF;
+}
+
+
+/* GESTIONE SLIDE STORY */
+.story-content { 
+    display: flex; 
+    flex-direction: column; 
+    height: auto; 
+    max-height: 90vh; 
+}
+.story-body { 
+    min-height: 300px; 
+    position: relative; 
+    overflow: hidden; 
+}
+.story-slide { 
+    display: none; 
+}
+.story-slide.active { 
+    display: block; 
+    animation: fadeIn 0.3s ease-in-out; 
+}
+.story-footer { 
+    padding: 15px 20px; 
+    display: flex; 
+    justify-content: flex-end; 
+    border-top: 1px solid rgba(0, 255, 255, 0.2); 
+}
+.next-button { 
+    background: transparent; 
+    border: 2px solid #FF00FF; 
+    color: #FF00FF; 
+    padding: 10px 20px; 
+    cursor: pointer; 
+    font-weight: bold; 
+    box-shadow: 0 0 10px #FF00FF; 
+}
+.next-button:hover { 
+    background: #FF00FF; 
+    color: black; 
+}
+
+@keyframes fadeIn { 
+    from { opacity: 0; transform: translateX(10px); } 
+    to { opacity: 1; transform: translateX(0); } 
+}
+
+/* --- STORY NAVIGATION STYLES --- */
+.story-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-top: 1px solid rgba(0, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.nav-arrow {
+    background: transparent;
+    border: 1px solid #FF00FF;
+    color: #FF00FF;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    text-shadow: 0 0 5px #FF00FF;
+    box-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
+    transition: 0.3s;
+}
+
+.nav-arrow:hover {
+    background: #FF00FF;
+    color: #000;
+    box-shadow: 0 0 20px #FF00FF;
+}
+
+.nav-dots {
+    display: flex;
+    gap: 10px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(0, 255, 255, 0.2);
+    border: 1px solid #00FFFF;
+    transition: 0.3s;
+}
+
+.dot.active {
+    background: #00FFFF;
+    box-shadow: 0 0 10px #00FFFF;
+}
+
+/* --- ANIMAZIONE SLIDE --- */
+.story-slide {
+    display: none;
+    width: 100%;
+}
+
+.story-slide.active {
+    display: block;
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* --- STILE SPECIFICO PER IL TASTO MENU IN MISSIONE --- */
+/* Stile Icona MENU in missione */
+
+.mission-menu-trigger { 
+    position: fixed !important;
+    top: 20px !important;    /* Lo forza in alto */
+    bottom: auto !important; /* Cancella la vecchia posizione in basso */
+    
+    /* Aumentiamo il valore per spostarlo decisamente a sinistra di Exit */
+    right: 105px !important; 
+    
+    left: auto;
+    z-index: 100; /* Lo tiene sopra ogni altro elemento */
+}
+
+.mission-menu-trigger {
+    border: 2px solid #007BFF !important; /* Bordo Blu Elettrico */
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.5) !important;
+}
+
+.mission-menu-trigger:hover {
+    background: rgba(0, 123, 255, 0.2) !important;
+    box-shadow: 0 0 25px #007BFF !important;
+}
+
+/* Stile comune per tutte le icone quadrate in missione */
+.action-icon {
+    width: 70px;
+    height: 70px;
+    position: fixed;
+    z-index: 80;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.8);
+    cursor: pointer;
+    transition: 0.3s;
+}

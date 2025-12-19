@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>White Rabbit</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <div class="top-bar">
+            <div class="left-menu" id="menu-toggle">
+                <span class="menu-icon">||</span>
+                <span>MENU</span>
+            </div>
+            <div class="right-settings" id="settings-button">
+                <span>SETTINGS</span>
+                <span class="settings-icon">|||</span>
+            </div>
+        </div>
+
+        <div class="main-content" id="main-menu-content">
+            <div class="logo-area">
+                <div class="rabbit-ears"></div>
+                <h1 class="game-title">WHITE RABBIT</h1>
+            </div>
+
+            <div class="button-group">
+                <button class="menu-button" id="play-button">PLAY NOW</button>
+                <button class="menu-button" id="continue-button">CONTINUE GAME</button>
+            </div>
+        </div>
+
+        <div id="side-menu" class="floating-panel">
+            <div class="side-menu-container">
+                <h2 class="side-menu-title">MENU</h2>
+                <div class="side-menu-buttons">
+                    <button class="side-button" id="story-button-from-menu">STORY</button>
+                    <button class="side-button" id="phases-button-from-menu">GAME PHASES</button>
+                    <button class="side-button" id="legend-button-from-menu">LEGEND</button>
+                    <button class="side-button" id="glossary-button-from-menu">CYBER GLOSSARY</button>
+                    <button class="side-button" id="icons-button-from-menu">GAME ICONS</button>
+                </div>
+            </div>
+            <button class="side-close-button" id="close-side-menu">CLOSE</button>
+        </div>
+
+        <div class="corner-deco"></div>
+    </div>
+
+    <div id="game-screen-1" class="full-screen hidden">
+
+        <div id="risk-bar-container" class="status-bar-container">
+            <span class="bar-label">DETECTION RISK</span>
+            <div class="progress-bar risk">
+                <div class="progress-fill risk-fill" style="width: 25%;"></div>
+            </div>
+        </div>
+
+        <div id="progress-bar-container" class="status-bar-container">
+            <span class="bar-label">MISSION PROGRESS</span>
+            <div class="progress-bar completion">
+                <div class="progress-fill completion-fill" style="width: 10%;"></div>
+            </div>
+        </div>
+
+        <div class="game-background-image"></div>
+
+        <button id="marco-monitor-hotspot" class="hotspot-trigger"></button>
+
+        <div class="mission-message-box">
+            <h2 class="message-box-title">MISSION IN PROGRESS: PHASE 1<br>PHYSICAL ENTRY</h2>
+            <p class="message-box-text">OmniCorp HQ, 02:00 AM.<br>You have gained access to the building.<br>Begin the search for network credentials.</p>
+
+            <button id="start-game-button" class="message-box-button">START</button>
+        </div>
+
+        <button id="glossary-icon" class="action-icon" style="left: 20px; right: auto;">
+            <span class="icon-text">&#128214;</span>
+            <span class="icon-label">GLOSSARY</span>
+        </button>
+
+        <button id="legend-icon-1" class="action-icon legend-trigger-icon" style="left: 110px; right: auto;">
+            <span class="icon-text">&#128203;</span>
+            <span class="icon-label">LEGEND</span>
+        </button>
+
+       <button class="action-icon mission-menu-trigger" style="bottom: 100px; right: 20px;">
+    <span class="icon-text" style="color: #007BFF; text-shadow: 0 0 10px #007BFF;">☰</span>
+    <span class="icon-label">MENU</span>
+</button>
+
+        <button id="exit-icon" class="action-icon exit-game-icon" style="right: 20px; left: auto;">
+            <span class="icon-text">&#10006;</span>
+            <span class="icon-label">EXIT</span>
+        </button>
+
+        <div id="narrator-box" class="narrator-message hidden">
+            <div class="narrator-icon">
+                <div class="rabbit-figure"></div>
+            </div>
+            <div class="narrator-text-content">
+                <p>Goal: Network Credentials. Think like a striker. Where are the weaknesses hidden? Find MARCO's location and log in to his system.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="game-screen-2" class="full-screen hidden">
+
+        <div id="risk-bar-container-2" class="status-bar-container">
+            <span class="bar-label">DETECTION RISK</span>
+            <div class="progress-bar risk">
+                <div class="progress-fill risk-fill" style="width: 15%;"></div>
+            </div>
+        </div>
+
+        <div id="progress-bar-container-2" class="status-bar-container">
+            <span class="bar-label">MISSION PROGRESS</span>
+            <div class="progress-bar completion">
+                <div class="progress-fill completion-fill" style="width: 60%;"></div>
+            </div>
+        </div>
+
+        <div class="game-background-image" id="background-phase-2"></div>
+
+        <button
+            id="server-cabinet-hotspot"
+            class="hotspot-trigger"
+            style="width: 250px; height: 150px; top: 75%; left: 35%; transform: translate(-50%, -50%); border: 2px dashed rgba(0, 255, 0, 0.5);"
+        ></button>
+
+        <div class="mission-message-box" id="mission-message-2">
+            <h2 class="message-box-title">MISSION IN PROGRESS: PHASE 2<br>NETWORK EXPLOITATION</h2>
+            <p class="message-box-text">
+                OmniCorp IT Department.<br>You are inside the network perimeter.<br>Objective: Bypass surveillance controls and establish a covert network connection.
+            </p>
+
+            <button id="start-phase-2-button-msg" class="message-box-button">START PHASE 2</button>
+        </div>
+
+        <div id="narrator-box-2" class="narrator-message hidden">
+            <div class="narrator-icon">
+                <div class="rabbit-figure"></div>
+            </div>
+            <div class="narrator-text-content">
+                <p>Goal: Access Control. The target is the central server cabinet. Look for weak access points, physical locks, or network vulnerabilities.</p>
+            </div>
+        </div>
+
+        <button id="glossary-icon-2" class="action-icon" style="left: 20px; right: auto;">
+            <span class="icon-text">&#128214;</span>
+            <span class="icon-label">GLOSSARY</span>
+        </button>
+
+        <button id="legend-icon-2" class="action-icon legend-trigger-icon" style="left: 110px; right: auto;">
+            <span class="icon-text">&#128203;</span>
+            <span class="icon-label">LEGEND</span>
+        </button>
+
+<button class="action-icon mission-menu-trigger" style="bottom: 100px; right: 20px;">
+    <span class="icon-text" style="color: #007BFF; text-shadow: 0 0 10px #007BFF;">☰</span>
+    <span class="icon-label">MENU</span>
+</button>
+
+        <button id="exit-icon-2" class="action-icon exit-game-icon" style="right: 20px; left: auto;">
+            <span class="icon-text">&#10006;</span>
+            <span class="icon-label">EXIT</span>
+        </button>
+    </div>
+
+    <div id="game-screen-3" class="full-screen hidden">
+
+        <div id="risk-bar-container-3" class="status-bar-container">
+            <span class="bar-label">DETECTION RISK</span>
+            <div class="progress-bar risk">
+                <div class="progress-fill risk-fill" style="width: 30%;"></div>
+            </div>
+        </div>
+
+        <div id="progress-bar-container-3" class="status-bar-container">
+            <span class="bar-label">MISSION PROGRESS</span>
+            <div class="progress-bar completion">
+                <div class="progress-fill completion-fill" style="width: 70%;"></div> </div>
+        </div>
+
+        <div class="game-background-image" id="background-phase-3"></div>
+
+       <button
+    id="ceo-monitor-hotspot"
+    class="hotspot-trigger"
+    style="width: 280px; height: 160px; top: 45%; left: 25%; transform: translate(-50%, -50%); border: 2px dashed rgba(255, 0, 0, 0.5);"
+></button>
+
+        <div id="narrator-box-3" class="narrator-message hidden">
+            <div class="narrator-icon">
+                <div class="rabbit-figure"></div>
+            </div>
+            <div class="narrator-text-content">
+                <p>Goal: Chimera Project. Access the main system and decrypt the files. This is the final step, Agent. Be quick.</p>
+            </div>
+        </div>
+
+        <button id="glossary-icon-3" class="action-icon" style="left: 20px; right: auto;">
+            <span class="icon-text">&#128214;</span>
+            <span class="icon-label">GLOSSARY</span>
+        </button>
+
+        <button id="legend-icon-3" class="action-icon legend-trigger-icon" style="left: 110px; right: auto;">
+            <span class="icon-text">&#128203;</span>
+            <span class="icon-label">LEGEND</span>
+        </button>
+
+        <button class="action-icon mission-menu-trigger" style="bottom: 100px; right: 20px;">
+    <span class="icon-text" style="color: #007BFF; text-shadow: 0 0 10px #007BFF;">☰</span>
+    <span class="icon-label">MENU</span>
+</button>
+
+        <button id="exit-icon-3" class="action-icon exit-game-icon" style="right: 20px; left: auto;">
+            <span class="icon-text">&#10006;</span>
+            <span class="icon-label">EXIT</span>
+        </button>
+
+    </div>
+
+    <div id="settings-modal" class="panel-overlay hidden">
+        <div class="modal-content floating-panel">
+            <div class="modal-header">
+                <span class="settings-title-top">SETTINGS</span>
+                <div class="top-right-settings">SETTINGS</div>
+            </div>
+
+            <div class="modal-body">
+                <hr class="modal-divider">
+
+                <div class="setting-group">
+                    <h3>STATISTICS</h3>
+                    <div class="setting-item">
+                        <span>FONT:</span>
+                        <span class="setting-value-selector">Cyber Mono</span>
+                    </div>
+                </div>
+
+                <hr class="modal-divider">
+
+                <div class="setting-group">
+                    <h3>ACCESSIBILITY</h3>
+                    <div class="setting-item">
+                        <span>COLORS:</span>
+                        <span class="setting-value-selector">Prefeflinto</span>
+                    </div>
+                    <div class="setting-item">
+                        <span>SOUND (ON/OFF)</span>
+                        <label class="switch" id="audio-toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <span>VOLUME: 85%</span>
+                        <div class="setting-value-bar">
+                            <div class="volume-level" style="width: 85%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="modal-divider">
+
+                <div class="setting-group">
+                    <h3>PRIVACY</h3>
+                    <div class="setting-item privacy-item">
+                        <span>GAME DATA: Shared</span>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <button class="close-button" id="close-settings-button">CLOSE</button>
+        </div>
+    </div>
+
+<div id="story-modal" class="panel-overlay hidden">
+    <div class="story-content floating-panel">
+        <div class="story-header">
+            <span class="story-title">MISSION BRIEFING</span>
+            <div class="top-right-settings">  RED TEAM</div>
+        </div>
+
+        <div class="story-body" id="story-pages-container">
+            <div class="story-slide active">
+                <div class="story-section">
+                    <h3>// OPERATIVE IDENTITY</h3>
+                    <p class="monospace-text final-note">
+                        The gaming experience is not a simple simulation of illegal hacking, but "Cipher", an external cybersecurity specialist, hired by OmniCorp for a Controlled Stress Test operation (Red Team). Your mission is to demonstrate the ineffectiveness of business defenses by simulating a complete Cyber Kill Chain, ranging from physical infiltration to data extraction.
+                    </p>
+                </div>
+            </div>
+
+            <div class="story-slide">
+                <div class="story-section">
+                    <h3>// OPERATING CONTEXT: NIGHTFALL</h3>
+                    <p>Operating Hours: Night (Outside Working Hours) to test safety with reduced staff.</p>
+                    <p>
+                        The Crisis Context: Recently, OmniCorp fired a senior executive with privileged access to sensitive data. Immediately after the departure, communications were intercepted indicating a clear threat: the former employee intends to publicly expose the secrets of "Project Chimera" a proprietary innovation that promises to radically redefine the entire technology sector.
+                    </p>
+                </div>
+            </div>
+
+            <div class="story-slide">
+                <div class="story-section">
+                    <h3>// CORE OBJECTIVES</h3>
+                     <ol>
+                        <li>TARGET: Perform an undetected Physical and Digital Infiltration at OmniCorp Headquarters. The final access point is the CEO's Private Server, where the source files and encrypted operating plans of Project Chimera reside.</li>
+                        <li>RECOVERY: Obtain and secure Project Chimera files before the former employee (or any external entity that can exploit the situation) can access them remotely or through the impending expiration of credentials.</li>
+                        <li>DOCUMENTATION: Exploit and document every single flaw, both in Physical Security Measures and Digital Network Defenses.</li>
+                    </ol>
+                    <p class="monospace-text final-note">
+                        Your success is not only recovering the data, but providing irrefutable proof that OmniCorp's current security systems are catastrophically failing and cannot withstand a dedicated and competent attacker.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="story-navigation">
+            <button class="nav-arrow" id="prev-story-button" style="visibility: hidden;">&#10094; PREV</button>
+            <div class="nav-dots" id="story-dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+            <button class="nav-arrow" id="next-story-button">NEXT &#10095;</button>
+        </div>
+    </div>
+</div>
+            <button class="close-button" id="close-story-button">ACKNOWLEDGE & EXIT</button>
+        </div>
+    </div>
+
+    <div id="phases-modal" class="panel-overlay hidden">
+        <div class="phases-content floating-panel">
+            <div class="phases-header">
+                <span class="phases-title">GAME PHASES</span>
+                <div class="top-right-settings">KILL CHAIN MODEL</div>
+            </div>
+
+            <div class="phases-body">
+                <div class="phases-introduction">
+                    <h3>// THE ESCALATION OF PRIVILEGE</h3>
+                    <p>
+                        Your journey through the three phases will simulate an escalation of privilege (Kill Chain), exploiting a different weak link at each step:
+                    </p>
+                </div>
+
+                <table class="phases-table">
+                    <thead>
+                        <tr>
+                            <th>PHASE</th>
+                            <th>MAIN TACTICS</th>
+                            <th>INTERMEDIATE OBJECTIVE</th>
+                            <th>VULNERABILITY EXAMINED</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Phase 1: The Entrance</td>
+                            <td>Social Engineering / Physical</td>
+                            <td>Obtain initial network credentials and physical access to the building.</td>
+                            <td>Human Factor: Weak password, baiting protocols (USB).</td>
+                        </tr>
+                        <tr>
+                            <td>Phase 2: The IT Department</td>
+                            <td>Network Exploitation</td>
+                            <td>Bypass surveillance controls and establish a covert network connection.</td>
+                            <td>System/Configuration: IoT Vulnerability/Default Credentials, Patch Management/Unupdated Systems.</td>
+                        </tr>
+                        <tr>
+                            <td>Phase 3: The CEO's Office</td>
+                            <td>Data Exfiltration</td>
+                            <td>Decipher and secure Project Chimera data.</td>
+                            <td>Implementation: Weak/obsolete encryption (e.g. Caesar's cipher) on the final archive.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <button class="close-button" id="close-phases-button">RETURN TO MENU</button>
+        </div>
+    </div>
+
+    <div id="password-modal" class="panel-overlay hidden">
+        <div class="terminal-content floating-panel">
+            <div class="terminal-header">
+                <span class="terminal-title">// OmniCorp Network Access</span>
+                <span class="terminal-status">STATUS: AUTH_REQUIRED</span>
+                <button id="close-terminal-button" class="terminal-close-btn">&#10006;</button>
+            </div>
+
+            <div class="terminal-body">
+                <p class="prompt-line">enter your password:</p>
+                <div class="input-line">
+                    <span class="cursor">></span>
+                    <input type="password" id="password-input" maxlength="20" autocomplete="off">
+                </div>
+
+                <p id="feedback-message" class="feedback-text"></p>
+            </div>
+
+            <button id="confirm-password-button" class="terminal-button">CONFIRMS</button>
+        </div>
+    </div>
+
+    <div id="lesson-modal" class="panel-overlay hidden">
+        <div class="lesson-content floating-panel">
+            <div class="lesson-header">
+                <span class="lesson-title">RISK ASSESSMENT COMPLETE</span>
+                <span class="lesson-status">DATA EXTRACTED</span>
+            </div>
+
+            <div class="lesson-body">
+                <h3>LESSON LEARNED: WEAKNESS IN HUMAN FACTOR</h3>
+                <p class="theory-text">
+                    PASSWORD SPRAYING<br>Knowing trivial or personal details (such as names, dates, pets, children) makes login attempts incredibly simple and quick for attackers. <br>Even if an attacker doesn't know the exact password, they can try common combinations across hundreds of accounts in an attack called Password Spraying.
+                </p>
+                <p class="theory-text monospace-text">
+                    Never write passwords on physical media and do not use personal, business, or trivial information. <br> This vulnerability was documented for the report.
+                </p>
+            </div>
+
+            <button id="lesson-learned-button" class="lesson-button">LESSON LEARNED</button>
+        </div>
+    </div>
+
+    <div id="decision-modal" class="panel-overlay hidden">
+        <div class="decision-content floating-panel">
+            <div class="decision-header">
+                <span class="decision-title"> BAITING PROTOCOL DETECTED</span>
+                <span class="decision-status">ACTION REQUIRED</span>
+            </div>
+
+            <div class="decision-body">
+                <h3>NPC INTERFERENCE: Unattended USB Drive</h3>
+                <p>
+                    The cleaner (NPC) noticed that you were working late and, seeing you struggling, offered you a USB stick found near the printer, saying, "Maybe there's a driver you need above. <br> Try to see, they're just work files."
+                </p>
+                <p>
+                    CHOICE:<br> Do you want to insert the USB stick to find the drivers or access point, ignoring known security protocols?
+                </p>
+            </div>
+
+            <div class="decision-buttons">
+                <button id="choice-insert-usb" class="decision-button danger">INSERT USB </button>
+                <button id="choice-decline-usb" class="decision-button safe">DECLINE </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="stuxnet-lesson-modal" class="panel-overlay hidden">
+        <div class="lesson-content floating-panel">
+            <div class="lesson-header">
+                <span class="lesson-title"> RISK ASSESSMENT: BAITING</span>
+                <span class="lesson-status">CRITICAL VULNERABILITY</span>
+            </div>
+
+            <div class="lesson-body">
+                <h3>LESSON LEARNED: BAITING E STUXNET</h3>
+                <p class="theory-text">
+                    BAIT: <br>Inserting an unknown USB stick is a classic baiting tactic. <br> While it may seem harmless, it's the preferred entry port for attackers.
+                </p>
+                <p class="theory-text monospace-text">
+                    PERSISTENT THREATS:<br> Advanced threats (such as viruses or ransomware) can self-execute by exploiting operating system vulnerabilities to spread automatically.<br> It only takes an instant to infect the entire network, as in the famous case of the Stuxnet malware, which used USB sticks as the initial infection vector in extremely secure environments.
+                </p>
+            </div>
+
+            <button id="stuxnet-learned-button" class="lesson-button">LESSON LEARNED: PHASE 1 COMPLETE</button>
+        </div>
+    </div>
+
+    <div id="phase-complete-modal" class="panel-overlay hidden">
+        <div class="complete-content floating-panel">
+            <div class="complete-header">
+                <span class="complete-title">PHASE 1 COMPLETE</span>
+                <div class="top-right-settings">STATUS: READY FOR PHASE 2</div>
+            </div>
+
+            <div class="complete-body">
+                <h3>OBJECTIVES ACHIEVED:</h3>
+                <ul>
+                    <li>Physical Access Established.</li>
+                    <li>Initial Network Credentials Acquired (Weak Password Exploited).</li>
+                    <li>Baiting Protocol Vulnerability Documented.</li>
+                </ul>
+
+                <p class="final-message-text">
+                    MISSION STATUS:<br> Access to the OmniCorp main network is secured. <br>
+                    Select an option to proceed:
+                </p>
+            </div>
+
+            <div class="complete-decision-buttons">
+                <button id="exit-to-menu-button" class="decision-button safe">EXIT (Return to Main Menu)</button>
+                <button id="start-phase-2-button" class="decision-button danger">PHASE 2 (Network Exploitation)</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="it-monitor-modal" class="panel-overlay hidden">
+        <div class="terminal-content floating-panel wide-modal">
+            <div class="terminal-header">
+                <span class="terminal-title">// OmniCorp Asset Management Interface</span>
+                <span class="terminal-status">STATUS: ONLINE</span>
+                <button id="close-it-monitor-button" class="terminal-close-btn">&#10006;</button>
+            </div>
+
+            <div class="terminal-body">
+                <h3>Static Device Inventory (IT-DEPT)</h3>
+                <div class="asset-table-container">
+                    <table class="asset-table">
+                        <thead>
+                            <tr>
+                                <th>Asset Tag</th>
+                                <th>Status</th>
+                                <th>Last maintenance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>OMNI-SERVER-04</td>
+                                <td>OK</td>
+                                <td>2 days ago</td>
+                            </tr>
+                            <tr>
+                                <td>OMNI-PRINTER-01</td>
+                                <td>WARNING</td>
+                                <td>1 week ago</td>
+                            </tr>
+                            <tr>
+                                <td>OMNI-NVR-250</td>
+                                <td>ATTIVO</td>
+                                <td>6 months ago</td>
+                            </tr>
+                            <tr>
+                                <td>OMNI-VOIP-249</td>
+                                <td>OK</td>
+                                <td>10 days ago</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <hr class="modal-divider-thin">
+
+                <p class="prompt-line terminal-input-prompt">
+                    <br>Enter the static IP address for the camera system :
+                </p>
+
+                <div class="input-line">
+                    <span class="cursor">></span>
+                    <input type="text" id="ip-input" maxlength="15" autocomplete="off" placeholder="Esempio: 192.168.1.xxx">
+                </div>
+
+                <p id="ip-feedback-message" class="feedback-text"></p>
+            </div>
+
+            <button id="confirm-ip-button" class="terminal-button">ACCESS NVR SYSTEM</button>
+        </div>
+    </div>
+
+    <div id="nvr-login-modal" class="panel-overlay hidden">
+        <div class="terminal-content floating-panel">
+            <div class="terminal-header">
+                <span class="terminal-title">// NVR Surveillance System Login</span>
+                <span class="terminal-status">STATUS: AUTH_REQUIRED</span>
+                <button id="close-nvr-login-button" class="terminal-close-btn">&#10006;</button>
+            </div>
+
+            <div class="terminal-body">
+                <h3>NVR-250: Insufficient Hardening</h3>
+                <p class="prompt-line">
+                    Attempting default credentials. Find the most common factory combination:
+                </p>
+                <div class="login-field">
+                    <span class="cursor">USERNAME:</span>
+                    <input type="text" id="nvr-username-input" value="admin" maxlength="20" autocomplete="off">
+                </div>
+                <div class="login-field">
+                    <span class="cursor">PASSWORD:</span>
+                    <input type="password" id="nvr-password-input" maxlength="20" autocomplete="off">
+                </div>
+
+                <p id="nvr-feedback-message" class="feedback-text"></p>
+            </div>
+
+            <button id="confirm-nvr-login-button" class="terminal-button">LOG IN</button>
+        </div>
+    </div>
+
+    <div id="default-creds-lesson-modal" class="panel-overlay hidden">
+        <div class="lesson-content floating-panel">
+            <div class="lesson-header">
+                <span class="lesson-title">RISK ASSESSMENT: INSUFFICIENT HARDENING</span>
+                <span class="lesson-status">VULNERABILITY DOCUMENTED</span>
+            </div>
+
+            <div class="lesson-body">
+                <h3>DEFAULT CREDENTIALS AND PREDICTABLE IP</h3>
+                <p class="theory-text">
+                    Great job, Cipher. You found the surveillance system (NVR).<br>
+                    Your success comes from two basic OmniCorp failures:
+                </p>
+                <ul class="lesson-list">
+                    <li>
+                        <strong>Lack of Hardening (Configuration):</strong> Critical systems such as NVRs (Network Video Recorders) have been left on predictable IP patterns (e.g. the high block rule).
+                    </li>
+                    <li>
+                        <strong>Lack of Protected Documentation:</strong> The essential information for guessing the IP (192.168.1.250) was visible (on the monitor and whiteboard).
+                    </li>
+                </ul>
+                <p class="theory-text monospace-text">
+                    The Lesson: Forwards always look for the path of least resistance. A critical system with factory configuration is the easiest entry point. The first line of defense is to change passwords by default.
+                </p>
+            </div>
+
+            <button id="default-creds-learned-button" class="lesson-button">LESSON LEARNED: NVR ACCESS</button>
+        </div>
+    </div>
+
+    <div id="patch-decision-modal" class="panel-overlay hidden">
+        <div class="decision-content floating-panel" style="max-width: 500px;">
+            <div class="decision-header">
+                <span class="decision-title">CRITICAL SYSTEM ALERT</span>
+                <span class="decision-status">ACTION REQUIRED</span>
+            </div>
+
+            <div class="decision-body">
+                <h3>Vulnerability: Delayed OS Update (Patch Management)</h3>
+                <p>
+                    The IT Service PC shows a pending critical OS update alert. Due to system configuration, applying or violently closing the warning will trigger a critical system interruption. <br> This machine is precariously linked to the NVR panel.
+                </p>
+
+                <h3 style="color: #FFFF00;">Goal: Force System Reboot to Apply NVR Command.</h3>
+
+                <div class="decision-buttons" style="margin-top: 20px;">
+                    <button id="action-update-now" class="decision-button danger">UPDATE NOW </button>
+                    <button id="action-ignore-and-crash" class="decision-button safe">CLOSE WARNING </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="patch-lesson-modal" class="panel-overlay hidden">
+        <div class="lesson-content floating-panel">
+            <div class="lesson-header">
+                <span class="lesson-title">RISK ASSESSMENT: VULNERABILITY EXPLOITED</span>
+                <span class="lesson-status">SYSTEM OFFLINE</span>
+            </div>
+
+            <div class="lesson-body">
+                <h3>LESSON LEARNED: LACK OF PATCH MANAGEMENT</h3>
+                <p class="theory-text">
+                    The attack was successful because the NVR surveillance system depended on an out-of-date, carelessly operated service PC.
+                </p>
+                <ul class="lesson-list">
+                    <li>
+                        <strong>Patch Management:</strong> Not updating operating systems due to laziness or lack of protocols is a critical risk. Patches address known vulnerabilities, and their absence creates instability that can be exploited for attacks (such as forcing a reboot or crash).
+                    </li>
+                    <li>
+                        <strong>Insufficient Solidification:</strong> Critical systems such as surveillance should not depend on auxiliary PCs and should have isolated power and network.
+                    </li>
+                </ul>
+                <p class="theory-text monospace-text">
+                    The Lesson: Always keep systems up to date and segment critical networks to prevent chain attacks.
+                </p>
+            </div>
+
+            <button id="patch-learned-button" class="lesson-button">LESSON LEARNED: CAMERA OFFLINE</button>
+        </div>
+    </div>
+
+    <div id="caesar-cipher-modal" class="panel-overlay hidden">
+        <div class="terminal-content floating-panel wide-modal">
+            <div class="terminal-header">
+                <span class="terminal-title">// CEO Terminal: Project CHIMERA Access</span>
+                <span class="terminal-status">STATUS: ENCRYPTED</span>
+                <button id="close-ceo-monitor-button" class="terminal-close-btn">&#10006;</button>
+            </div>
+
+            <div class="terminal-body">
+                <h3>Encrypted File: Chimera Project Source Code</h3>
+                <p class="prompt-line">
+                    <span class="cursor" style="color: #FF00FF;">ENCRYPTED_DATA:</span>
+                    <span class="encrypted-text monospace-text" style="color: #FFFF00;" id="encrypted-text-content">JVY ZVYLJLZ ZHYL YFSLT TLY. GLZJVY KL JLZZ.</span>
+                </p>
+                <hr class="modal-divider-thin">
+                <p class="prompt-line terminal-input-prompt">
+                    Enter the Caesar Cipher key (shift value, 1-25) to decrypt the files:
+                </p>
+                <div class="input-line">
+                    <span class="cursor">></span>
+                    <input type="text" id="cipher-key-input" maxlength="2" autocomplete="off" placeholder="Key (Shift Value)">
+                </div>
+
+                <p id="cipher-feedback-message" class="feedback-text"></p>
+                <p id="decrypted-output" class="feedback-text success-text"></p>
+            </div>
+
+            <button id="confirm-cipher-key-button" class="terminal-button">DECRYPT FILES</button>
+        </div>
+    </div>
+
+    <div id="caesar-lesson-modal" class="panel-overlay hidden">
+        <div class="lesson-content floating-panel">
+            <div class="lesson-header">
+                <span class="lesson-title">RISK ASSESSMENT: VULNERABILITY EXPLOITED</span>
+                <span class="lesson-status">DATA DECRYPTED</span>
+            </div>
+
+            <div class="lesson-body">
+                <h3>LESSON LEARNED: WEAK ENCRYPTION (CAESAR CIPHER)</h3>
+                <p class="theory-text">
+                    The attack was a success because the encryption implemented by the CEO was predictable (Caesar Cipher).
+                </p>
+                <ul class="lesson-list">
+                    <li>
+                        <strong>Weak Encryption:</strong> A simple cipher like Caesar's is vulnerable to brute force and should never be used to protect sensitive data. <br> Any striker with basic knowledge can decipher it quickly.
+                    </li>
+                    <li>
+                        <strong>Key Management Failure:</strong> The key used was easily deductible (e.g. a low/obvious number), reflecting negligence in Key Management.
+                    </li>
+                </ul>
+                <p class="theory-text monospace-text">
+                    The Lesson: Use modern, robust encryption algorithms (like AES-256) and never let critical data depend on simple keys or methods.
+                </p>
+            </div>
+
+            <button id="caesar-learned-button" class="lesson-button">PHASE 3 COMPLETE: MISSION OBJECTIVE REACHED</button>
+        </div>
+    </div>
+
+    <div id="final-win-modal" class="panel-overlay hidden">
+        <div class="complete-content floating-panel">
+            <div class="complete-header">
+                <div id="final-progress-bar-container" class="status-bar-container" style="position: static; border: none; box-shadow: none; padding: 0;">
+                    <span class="bar-label" style="color: #00FF00; text-shadow: 0 0 5px #00FF00;">MISSION PROGRESS</span>
+                    <div class="progress-bar completion" style="width: 400px; height: 18px; border-color: #00FF00;">
+                        <div class="progress-fill completion-fill" style="width: 100%; background: linear-gradient(to right, #00FF00, #00FF00);"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="complete-body">
+                <h3 style="color: #FF00FF; text-shadow: 0 0 5px #FF00FF;">MISSION SUCCESS: DATA SECURED</h3>
+                <p class="final-message-text">
+                    REPORT GENERATED.<br> Thank you for completing the White Rabbit Stress Test, Agent Cipher.
+                </p>
+                <p style="text-align: left; font-size: 0.9em; margin-top: 15px;">
+                    Vulnerabilità Documentate:
+                </p>
+                <ul>
+                    <li>Weak Passwords (Human Factor)</li>
+                    <li>Baiting Protocol (Social Engineering)</li>
+                    <li>IoT Default Credentials (Insufficient Hardening)</li>
+                    <li>Unupdated Systems (Patch Management)</li>
+                    <li>Weak Encryption (Caesar Cipher)</li>
+                </ul>
+            </div>
+
+            <div class="complete-decision-buttons">
+                <button id="final-exit-menu" class="decision-button danger" style="width: 100%; border-color: #FF00FF;">REVIEW DEBRIEFING</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="debriefing-modal" class="panel-overlay hidden">
+        <div class="story-content floating-panel" style="max-width: 600px; border-color: #FF00FF; box-shadow: 0 0 30px rgba(255, 0, 255, 0.8);">
+            <div class="story-header" style="border-bottom: 2px solid #FF00FF;">
+                <span class="story-title" style="color: #FF00FF; text-shadow: 0 0 5px #FF00FF;">FINAL DEBRIEFING: OMNICORP SECURITY STATUS</span>
+                <div class="top-right-settings" style="background-color: #FF00FF; color: black; box-shadow: 0 0 10px #FF00FF;">STATUS: FAILURE</div>
+            </div>
+
+            <div class="story-body">
+                <div class="story-section" style="border-left: 3px solid #FF00FF;">
+                    <h3>// CRITICAL ASSESSMENT</h3>
+                    <p class="monospace-text" style="color: #FFFF00;">
+                        Operation White Rabbit demonstrated a catastrophic failure to protect OmniCorp data.<br>The mission was completed in a short time using only internal negligence, without the use of complex zero-day exploits.
+                    </p>
+                </div>
+
+                <div class="story-section" style="border-left: 3px solid #FF00FF;">
+                    <h3>// SUMMARY OF FAILURE</h3>
+                    <p>
+                        The attack chain was entirely facilitated by the: Human Factor (Weak Passwords, Baiting) and a total lack of Hardening (Default Credentials, non-existent Patch Management).<br> The company's most sensitive file (Project Chimera) was protected by easily bypassable encryption.
+                    </p>
+                    <p style="font-weight: bold; color: #FF00FF;">
+                        CONCLUSION: OmniCorp's security is non-existent and it is unable to withstand a determined attack.<br>Immediate corrections are recommended.
+                    </p>
+                </div>
+            </div>
+
+            <button class="close-button" id="close-debriefing-button" style="border-color: #FF00FF; box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);">RETURN TO MAIN MENU</button>
+        </div>
+    </div>
+
+
+    <div id="glossary-modal" class="panel-overlay hidden">
+        <div class="glossary-content floating-panel">
+            <div class="glossary-header">
+                <span class="glossary-title">CYBER GLOSSARY</span>
+                <div class="top-right-settings">LESSONS ARCHIVE</div>
+            </div>
+
+            <div class="glossary-body">
+                <div class="glossary-phase">
+                    <h3>PHASE 1: SOCIAL ENGINEERING & PHYSICAL ACCESS</h3>
+
+                    <div class="glossary-lesson-item">
+                        <h4>1. WEAKNESS IN HUMAN FACTOR (Password Spraying)</h4>
+                        <p class="theory-text">
+                            PASSWORD SPRAYING<br>
+                            Knowing trivial or personal details (such as names, dates, pets, children) makes login attempts incredibly simple and quick for attackers. Even if an attacker doesn't know the exact password, they can try common combinations across hundreds of accounts in an attack called Password Spraying.
+                        </p>
+                        <p class="theory-text monospace-text">
+                            Mitigation: Never write passwords on physical media and do not use personal, business, or trivial information.
+                        </p>
+                    </div>
+
+                    <div class="glossary-lesson-item">
+                        <h4>2. BAITING PROTOCOL & PERSISTENT THREATS</h4>
+                        <p class="theory-text">
+                            BAITING<br>
+                            Inserting an unknown USB stick is a classic baiting tactic. While it may seem harmless, it's the preferred entry port for attackers.
+                        </p>
+                        <p class="theory-text monospace-text">
+                            PERSISTENT THREATS<br>
+                            Advanced threats (such as viruses or ransomware) can self-execute by exploiting operating system vulnerabilities to spread automatically. <br>It only takes an instant to infect the entire network, as in the famous case of the Stuxnet malware, which used USB sticks as the initial infection vector in extremely secure environments.
+                        </p>
+                    </div>
+                </div>
+
+                <hr class="glossary-divider">
+
+                <div class="glossary-phase">
+                    <h3>PHASE 2: NETWORK HARDENING & SYSTEM VULNERABILITIES</h3>
+
+                    <div class="glossary-lesson-item">
+                        <h4>1. DEFAULT CREDENTIALS AND PREDICTABLE IP</h4>
+                        <p class="theory-text">
+                            Lack of Hardening (Configuration):<br> Critical systems such as NVRs (Network Video Recorders) have been left on predictable IP patterns (e.g. the high block rule).<br>
+                            Lack of Protected Documentation: <br>The essential information for guessing the IP was visible (on the monitor and whiteboard).
+                        </p>
+                        <p class="theory-text monospace-text">
+                            The Lesson:<br> Always look for the path of least resistance. A critical system with factory configuration is the easiest entry point. The first line of defense is to change passwords by default.
+                        </p>
+                    </div>
+
+                    <div class="glossary-lesson-item">
+                        <h4>2. LACK OF PATCH MANAGEMENT (Unupdated Systems)</h4>
+                        <p class="theory-text">
+                            Patch Management: <br>Not updating operating systems due to laziness or lack of protocols is a critical risk. Patches resolve known vulnerabilities and their absence creates instability that can be exploited for attacks (like forcing a reboot or a crash).<br>
+                            Insufficient Solidification:<br>Critical systems such as surveillance should not depend on auxiliary PCs and should have isolated power and network.
+                        </p>
+                        <p class="theory-text monospace-text">
+                            The Lesson:<br> Always keep systems up to date and segment critical networks to prevent chain attacks.
+                        </p>
+                    </div>
+                </div>
+
+                <hr class="glossary-divider">
+
+                <div class="glossary-phase">
+                    <h3>PHASE 3: DATA EXFILTRATION & CRYPTOGRAPHY</h3>
+
+                    <div class="glossary-lesson-item">
+                        <h4>1. WEAK ENCRYPTION (Caesar Cipher)</h4>
+                        <p class="theory-text">
+                            Weak Encryption:<br>A simple cipher like the Caesar cipher is vulnerable to brute force and should never be used to protect sensitive data. Any attacker with basic knowledge can quickly decipher it.<br>
+                            Key Management Failure:<br> The key used was easily deducible (e.g. a low/obvious number), reflecting negligence in Key Management.
+                        </p>
+                        <p class="theory-text monospace-text">
+                            The Lesson:<br> Use modern and robust encryption algorithms (like AES-256) and never let critical data depend on simple keys or methods.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <button class="close-button" id="close-glossary-button">CLOSE ARCHIVE</button>
+        </div>
+    </div>
+    <div id="icons-modal" class="panel-overlay hidden">
+        <div class="icons-content floating-panel">
+            <div class="icons-header">
+                <span class="icons-title">GAME ICONS</span>
+                <div class="top-right-settings">HUD LEGEND</div>
+            </div>
+
+            <div class="icons-body">
+                <div class="icons-phase">
+                    <h3>GAMEPLAY INTERFACE (HUD & ACTIONS)</h3>
+
+                    <table class="icons-table">
+                        <thead>
+                            <tr>
+                                <th>ELEMENT / ICON</th>
+                                <th>DESCRIPTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="progress-bar-legend">
+                                        <div class="progress-fill risk-fill" style="width: 50%;"></div>
+                                    </div>
+                                    <span class="legend-text-label">DETECTION RISK</span>
+                                </td>
+                                <td>
+                                     Measures the risk of being discovered (Game Over). Increases with failed attempts or noisy actions. It must remain below 100%. The color changes from Green (low) to Red (high).
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="progress-bar-legend completion-legend">
+                                        <div class="progress-fill completion-fill" style="width: 50%; opacity: 1;"></div>
+                                    </div>
+                                    <span class="legend-text-label">MISSION PROGRESS</span>
+                                </td>
+                                <td>
+                                    Indicates the progress of the mission (Pentest). Increases whenever a vulnerability is successfully exploited. The goal is to achieve 100%. The color changes from Red (low) to Green (high).
+                                 </td>
+                            </tr>
+                             <tr>
+                                <td>
+                                    <span class="legend-icon-text legend-icon-cyan">&#128214;</span><br>
+                                    <span class="icon-label">GLOSSARY</span>
+                                </td>
+                                <td>
+                                    Access to the Lessons Learned archive and Cybersecurity theoretical information. Available on every game screen.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="legend-icon-text legend-icon-magenta">&#10006;</span><br>
+                                    <span class="icon-label">EXIT</span>
+                                </td>
+                                <td>
+                                    Quick exit button that takes you back to the Main Menu.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="narrator-icon-legend"></div>
+                                    <span class="legend-text-label">WHITE RABBIT GUIDE</span>
+                                </td>
+                                <td>
+                                    The virtual assistant that provides current mission objectives and helpful puzzle-solving tips.
+                                </td>
+                            </tr>
+                            <tr>
+    <tr>
+    <td>
+        <span class="legend-icon-text" style="color:#007BFF; text-shadow: 0 0 8px #007BFF;">&#9776;</span><br>
+        <span class="icon-label">MENU</span>
+    </td>
+    <td>
+       Access the Menu to have full control over your game: retrace the story or explore the stages of the game already unlocked.
+    </td>
+</tr>
+
+<tr>
+    <td>
+        <span class="legend-icon-text" style="color: #FF00FF; text-shadow:  0 0 5px #FF00FF;">&#128203;</span><br>
+        <span class="icon-label">LEGEND</span>
+    </td>
+    <td>
+       Access to the Legend allows you to view details and tips useful for unlocking missions.
+    </td>
+</tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <button class="close-button" id="close-icons-button">CLOSE LEGEND</button>
+        </div>
+    </div>
+    <div id="legend-modal" class="panel-overlay hidden">
+        <div class="legend-content floating-panel">
+            <div class="legend-header">
+                <span class="legend-title">LEGEND</span>
+                <div class="top-right-settings">ENVIRONMENTAL CLUES</div>
+            </div>
+
+            <div class="legend-body">
+                <div class="legend-phase">
+                    <h3>PHASE 1: OPEN SPACE (Weak Password & Baiting)</h3>
+
+                    <table class="legend-table">
+                        <thead>
+                            <tr>
+                                <th>CLUE IMAGE</th>
+                                <th>CLUE DESCRIPTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="clue-placeholder">
+                                        <img class="clue-image" data-src="task1223.jpg" alt="Task 2: 1 2 3">
+                                    </div>
+                                </td>
+                                <td>
+                                    Weak Password:<br> Handwritten numeric code found near Marco's post. He suggests that his PC's weak password includes the sequence of numbers (1223).
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <hr class="legend-divider-thin">
+
+                <div class="legend-phase">
+                    <h3>PHASE 2: IT DEPARTMENT (Hardening & Patch Management)</h3>
+
+                    <table class="legend-table">
+                        <thead>
+                            <tr>
+                                <th>CLUE IMAGE</th>
+                                <th>CLUE DESCRIPTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="clue-placeholder">
+                                        <img class="clue-image" data-src="lavagna.jpg" alt="IP Mapping Scheme">
+                                    </div>
+                                </td>
+                                <td>
+                                    Network Configuration Clue:<br> IT Department IP Mapping Scheme (IP) whiteboard. It indicates the main subnet and IP range, suggesting the logic for guessing the NVR address.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="clue-placeholder">
+                                        <img class="clue-image" data-src="omni250.jpg" alt="Asset Tag OMNI-NVR-250">
+                                    </div>
+                                </td>
+                                <td>
+                                    NVR IP Address Clue:<br> Asset Tag 'OMNI-NVR-250' found in Asset management system. The identifier '250' indicates the static address block to be inserted to complete the NVR IP ('192.168.1.250'), taking advantage of Insufficient Hardening.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <hr class="legend-divider-thin">
+
+                <div class="legend-phase">
+                    <h3>PHASE 3: CEO'S OFFICE (Weak Encryption)</h3>
+
+                    <table class="legend-table">
+                        <thead>
+                            <tr>
+                                <th>CLUE IMAGE</th>
+                                <th>CLUE DESCRIPTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="clue-placeholder">
+                                        <img class="clue-image" data-src="cript.jpg" alt="Encrypted Data JVY ZVYLJLZ ZHYL YFSLT TLY. GLZJVY KL JLZZ.">
+                                    </div>
+                                </td>
+                                <td>
+                                    Caesar Cipher Key Clue:<br> Encrypted string from Project Chimera. The key (shift key) for decryption (Caesar Cipher) is the total number of words in the string: 8.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <button class="close-button" id="close-legend-button">CLOSE LEGEND</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+
