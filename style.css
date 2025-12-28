@@ -2344,3 +2344,37 @@ input:checked + .slider:before {
     cursor: pointer;
     transition: 0.3s;
 }
+
+
+.volume-trigger-icon {
+    border: 2px solid #00FF00 !important;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.5) !important;
+}
+
+.volume-trigger-icon:hover {
+    background: rgba(0, 255, 0, 0.2) !important;
+    box-shadow: 0 0 25px #00FF00 !important;
+}
+
+.volume-trigger-icon .icon-text {
+    color: #00FF00 !important;
+    text-shadow: 0 0 5px #00FF00 !important;
+}
+
+#volume-slider {
+    -webkit-appearance: none;
+    background: rgba(0, 255, 255, 0.1);
+    border: 1px solid #00FFFF;
+    height: 10px;
+    outline: none;
+    cursor: pointer;
+}
+
+#volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 15px;
+    height: 15px;
+    background: #FF00FF; /* Magenta come i tuoi pulsanti di azione */
+    box-shadow: 0 0 10px #FF00FF;
+    cursor: pointer;
+}

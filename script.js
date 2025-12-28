@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Pulsanti Menu Principale
     const playButton = document.getElementById('play-button');
     const continueButton = document.getElementById('continue-button');
-    
+   
     // Contenitore Menu Centrale
     const mainMenuContent = document.getElementById('main-menu-content');
     
@@ -153,10 +153,36 @@ prevStoryButton.addEventListener('click', () => {
     const narratorTextContent1 = narratorBox1.querySelector('.narrator-text-content p');
     const narratorTextContent2 = narratorBox2.querySelector('.narrator-text-content p');
 
+// Riferimenti ai nuovi bottoni volume
+const volumeButtons = document.querySelectorAll('.volume-trigger-icon');
+const bgMusic = document.getElementById('bg-music');
+const audioToggleSwitch = document.querySelector('#audio-toggle-switch input');
 
-    // Elementi Interattivi (Generali)
-    const audioToggleSwitch = document.querySelector('#audio-toggle-switch input');
-    // Riferimenti alle icone Glossario in-game
+
+// 1. Riferimenti ai nuovi elementi
+const volumeSlider = document.getElementById('volume-slider');
+const volumeLabel = document.getElementById('volume-value');
+
+// 2. Funzione per cambiare il volume
+if (volumeSlider) {
+    volumeSlider.addEventListener('input', (event) => {
+        const volume = event.target.value;
+        
+        // Aggiorna il file audio
+        if (bgMusic) {
+            bgMusic.volume = volume;
+        }
+
+        // Aggiorna il testo nel menu (es: 85)
+        if (volumeLabel) {
+            volumeLabel.textContent = Math.round(volume * 100);
+        }
+        
+        console.log(`Volume impostato a: ${volume}`);
+    });
+}
+
+   // Riferimenti alle icone Glossario in-game
     const glossaryIcon1 = document.getElementById('glossary-icon');
     const glossaryIcon2Game = document.getElementById('glossary-icon-2');
     const glossaryIcon3Game = document.getElementById('glossary-icon-3');
@@ -168,7 +194,7 @@ prevStoryButton.addEventListener('click', () => {
     const confirmPasswordButton = document.getElementById('confirm-password-button');
     const feedbackMessage = document.getElementById('feedback-message');
     const closeTerminalButton = document.getElementById('close-terminal-button'); 
-    const CORRECT_PASSWORD = "marco1223";
+    const CORRECT_PASSWORD = "marco123";
     
     // MODAL PUZZLE FASE 2 (NVR IP)
     const itMonitorModal = document.getElementById('it-monitor-modal');
@@ -190,7 +216,7 @@ prevStoryButton.addEventListener('click', () => {
     const nvrFeedbackMessage = document.getElementById('nvr-feedback-message');
     const closeNvrLoginButton = document.getElementById('close-nvr-login-button');
     const NVR_CORRECT_USERNAME = "admin";
-    const NVR_CORRECT_PASSWORD = "admin123";
+    const NVR_CORRECT_PASSWORD = "admin";
     
     // MODALE DECISIONE PATCH MANAGEMENT (RIUTILIZZATO PER CONFERMA DISATTIVAZIONE)
     const patchDecisionModal = document.getElementById('patch-decision-modal');
@@ -475,7 +501,16 @@ prevStoryButton.addEventListener('click', () => {
         }
     };
 
-
+// Gestisce l'attivazione/disattivazione della musica dalle impostazioni
+if (audioToggleSwitch) {
+    audioToggleSwitch.addEventListener('change', () => {
+        if (audioToggleSwitch.checked) {
+            bgMusic.play();
+        } else {
+            bgMusic.pause();
+        }
+    });
+}
     // ----------------------------------------------------
     // III. LOGICA DI GIOCO
     // ----------------------------------------------------
@@ -579,6 +614,35 @@ prevStoryButton.addEventListener('click', () => {
         console.log("Fase 3 avviata. Missione: Caesar Cipher.");
     };
 
+// Funzione click per i bottoni volume
+volumeButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        if (bgMusic.paused) {
+            bgMusic.play().catch(e => console.log("Interagire col gioco per l'audio"));
+            if (audioToggleSwitch) audioToggleSwitch.checked = true;
+            updateVolumeUI(true);
+        } else {
+            bgMusic.pause();
+            if (audioToggleSwitch) audioToggleSwitch.checked = false;
+            updateVolumeUI(false);
+        }
+    });
+});
+
+// Funzione per aggiornare l'icona in tutte le schermate
+function updateVolumeUI(isPlaying) {
+    volumeButtons.forEach(btn => {
+        const iconText = btn.querySelector('.icon-text');
+        iconText.textContent = isPlaying ? '🔊' : '🔈';
+    });
+}
+
+// Sincronizzazione se l'utente cambia lo stato direttamente dai Settings
+if (audioToggleSwitch) {
+    audioToggleSwitch.addEventListener('change', (e) => {
+        updateVolumeUI(e.target.checked);
+    });
+}
     /**
      * Nasconde SOLO il pop-up del messaggio e gestisce la transizione dell'Hotspot.
      */
@@ -948,11 +1012,19 @@ prevStoryButton.addEventListener('click', () => {
     }
 
     // Pulsanti Principali del Menu
-    if(playButton) playButton.addEventListener('click', startGame);
-    if(continueButton) continueButton.addEventListener('click', () => {
+    playButton.addEventListener('click', () => {
+    startGame();
+    // Forza l'avvio se lo switch è acceso
+   if (bgMusic && audioToggleSwitch.checked) { 
+    bgMusic.play().catch(e => console.error("Errore audio:", e));
+}
+});
+
+if(continueButton) continueButton.addEventListener('click', () => {
         closeAllModals();
         alert('You clicked "CONTINUE GAME". Loading saved state... (Not implemented yet)');
     });
+
     
     // Pulsante START/CONTINUE in Game Screen
     if (startGameButton) {
@@ -1099,4 +1171,14 @@ document.querySelectorAll('.mission-menu-trigger').forEach(btn => {
     });
 });
 
-
+document.querySelectorAll('.volume-trigger-icon').forEach(btn => {
+    btn.addEventListener('click', () => {
+        if (bgMusic.paused) {
+            bgMusic.play();
+            audioToggleSwitch.checked = true; // Usa il nome corretto
+        } else {
+            bgMusic.pause();
+            audioToggleSwitch.checked = false; // Usa il nome corretto
+        }
+    });
+});

@@ -47,7 +47,10 @@
 
         <div class="corner-deco"></div>
     </div>
-
+   
+  <audio id="bg-music" loop>
+    <source src="musicCyber.mp3" type="audio/mpeg">
+</audio>
     <div id="game-screen-1" class="full-screen hidden">
 
         <div id="risk-bar-container" class="status-bar-container">
@@ -94,6 +97,13 @@
             <span class="icon-text">&#10006;</span>
             <span class="icon-label">EXIT</span>
         </button>
+
+   
+<button id="volume-icon-1" class="action-icon volume-trigger-icon" style="top: 100px; right: 20px;">
+        <span class="icon-text">🔊</span>
+        <span class="icon-label">VOLUME</span>
+    </button>
+    
 
         <div id="narrator-box" class="narrator-message hidden">
             <div class="narrator-icon">
@@ -166,7 +176,16 @@
             <span class="icon-text">&#10006;</span>
             <span class="icon-label">EXIT</span>
         </button>
+
+ <button id="volume-icon-2" class="action-icon volume-trigger-icon" style="top: 100px; right: 20px;">
+        <span class="icon-text">🔊</span>
+        <span class="icon-label">VOLUME</span>
+    </button>
+
     </div>
+
+  
+    
 
     <div id="game-screen-3" class="full-screen hidden">
 
@@ -220,6 +239,12 @@
             <span class="icon-label">EXIT</span>
         </button>
 
+      <button id="volume-icon-3" class="action-icon volume-trigger-icon" style="top: 100px; right: 20px;">
+        <span class="icon-text">🔊</span>
+        <span class="icon-label">VOLUME</span>
+    </button>
+    
+
     </div>
 
     <div id="settings-modal" class="panel-overlay hidden">
@@ -256,11 +281,11 @@
                         </label>
                     </div>
                     <div class="setting-item">
-                        <span>VOLUME: 85%</span>
-                        <div class="setting-value-bar">
-                            <div class="volume-level" style="width: 85%;"></div>
-                        </div>
-                    </div>
+    <span>VOLUME: <span id="volume-value">85</span>%</span>
+    <div class="setting-value-bar-container" style="width: 100px;">
+        <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.85" style="width: 100%;">
+    </div>
+</div>
                 </div>
 
                 <hr class="modal-divider">
@@ -1010,7 +1035,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    Weak password:<br> Handwritten numeric code found near Marco's post. He hypothesizes that his PC's weak password includes the sequence of numbers (1223), merging the employee's name (Marco), the full password is: marco1223
+                                    Weak password:<br> Handwritten numeric code found near Marco's post. He hypothesizes that his PC's weak password includes the sequence of numbers (123), merging the employee's name (Marco), the full password is: marco123
                                 </td>
                             </tr>
 
@@ -1041,6 +1066,16 @@
                                     Network Configuration Clue:<br> IT Department IP Mapping Scheme (IP) whiteboard. It indicates the main subnet and IP range, suggesting the logic for guessing the NVR address.
                                 </td>
                             </tr>
+                            <tr>
+                <td>
+                    <div class="clue-placeholder">
+                        <img class="clue-image" data-src="admin.png" alt="NVR Surveillance System Login">
+                    </div>
+                </td>
+                <td>
+                    Surveillance System Login:<br>Access interface for the security cameras. Due to insufficient hardening, the system still uses factory settings: the password to gain access is "admin".
+                </td>
+            </tr>
                             <tr>
                                 <td>
                                     <div class="clue-placeholder">
@@ -1085,8 +1120,11 @@
 
             <button class="close-button" id="close-legend-button">CLOSE LEGEND</button>
         </div>
+      
     </div>
+     
     <script src="script.js"></script>
+    
 </body>
 </html>
 
