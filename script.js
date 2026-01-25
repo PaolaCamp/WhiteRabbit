@@ -155,7 +155,9 @@ prevStoryButton.addEventListener('click', () => {
 
 // Riferimenti ai nuovi bottoni volume
 const volumeButtons = document.querySelectorAll('.volume-trigger-icon');
-const bgMusic = document.getElementById('bg-music');
+const bgMusic = new Audio('./musicCyber.mp3'); 
+bgMusic.loop = true;
+bgMusic.volume = 0.5;
 const audioToggleSwitch = document.querySelector('#audio-toggle-switch input');
 
 
